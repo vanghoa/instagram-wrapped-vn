@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Messenger Wrapped</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Instagram Quấn</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
             href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap"
             rel="stylesheet"
         />
-        <link rel="stylesheet" type="text/css" href="style/style.css" />
+        <link rel="stylesheet" type="text/css" href="index.css" />
         <link
             rel="icon"
             href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💬</text></svg>"
@@ -27,11 +29,16 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
         ></script>
-        <script src="js/your_messenger_wrapped.js"></script>
-        <script src="js/sketch.js"></script>
-        <script src="js/script.js"></script>
+        <script src="sketch.js"></script>
+        <script src="index.js"></script>
     </head>
     <body>
+        <button
+            style="position: fixed; left: 0; top: 0; z-index: 200"
+            onclick="readDirectory()"
+        >
+            Read Directory
+        </button>
         <div id="body-gradient">
             <div id="saved-photo-gradient">
                 <div
@@ -44,6 +51,7 @@
                                 position: absolute;
                                 left: 50%;
                                 top: 50%;
+                                width: 500px;
                                 transform: translate(-50%, -50%);
                                 font-size: 60px;
                                 text-align: center;
@@ -55,19 +63,24 @@
                                 line-height: 1em;
                             "
                         >
-                            Instagram Quấn
+                            Instagram Quấn 2023
                         </h1>
                         <!-- @anotherbrowsertab took this photo of the ducks -->
                     </div>
                     <div id="top-row" class="row">
                         <div class="block">
-                            <h1 id="top-people-or-num-messages-sent">
-                                Top inbox
+                            <h1
+                                style="width: 13em"
+                                id="top-people-or-num-messages-sent"
+                            >
+                                Top người luôn nằm trong dm
                             </h1>
                             <ol id="top-people"></ol>
                         </div>
                         <div class="block">
-                            <h1>Bạn thả tim story của ai nhiều nhất?</h1>
+                            <h1 style="width: 13em">
+                                Bạn hay (tự nhiên) thả tim story của ai?
+                            </h1>
                             <ol id="top-phrases"></ol>
                         </div>
                     </div>
@@ -78,10 +91,10 @@
                             <blurb>tin nhắn</blurb>
                         </div>
                         <div class="block">
-                            <h1>Bạn đã thả</h1>
+                            <h1>Bạn đã để lại</h1>
                             <p id="total-reacts-and-stickers"></p>
-                            <blurb
-                                >trái tim cho
+                            <blurb style="width: 13em; display: inline-block"
+                                >con tim trên story của
                                 <span id="total_storylikes_ppl"></span>
                                 người</blurb
                             >
@@ -93,12 +106,12 @@
                     </div>
                 </div>
             </div>
-            <a id="pause-button">
+            <button id="pause-button" onclick="pauseStartAnimation()">
                 <span id="pause-button-icon" class="material-symbols-outlined"
                     >pause</span
                 >
                 <span id="pause-button-text">Pause</span>
-            </a>
+            </button>
         </div>
     </body>
 </html>
