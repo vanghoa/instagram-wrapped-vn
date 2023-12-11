@@ -2,3 +2,12 @@ messages/
 js/your_messenger_wrapped.js
 example_output.png
 LICENSE
+data
+__pycache__
+build
+dist
+.spec
+your_instagram_quan_is_here.html
+index.html
+js
+style

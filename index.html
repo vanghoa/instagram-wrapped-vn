@@ -1,58 +1,104 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Messenger Wrapped</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="style/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💬</text></svg>">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js" integrity="sha512-WJXVjqeINVpi5XXJ2jn0BSCfp0y80IKrYh731gLRnkAS9TKc5KNt/OfLtu+fCueqdWniouJ1ubM+VI/hbo7POQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="js/your_messenger_wrapped.js"></script>
-    <script src="js/sketch.js"></script>
-    <script src="js/script.js"></script>
-  </head>
-  <body>
-    <div id="body-gradient">
-      <div id="saved-photo-gradient">
-        <div id="container">
-          <div id="profile-photo">
-            <img id="album-image" src="style/ducks.jpg"/> <!-- @anotherbrowsertab took this photo of the ducks -->
-          </div>
-          <div id="top-row" class="row">
-            <div class="block">
-              <h1 id="top-people-or-num-messages-sent">Top People</h1>
-              <ol id="top-people">
-              </ol>
+    <head>
+        <title>Messenger Wrapped</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" type="text/css" href="style/style.css" />
+        <link
+            rel="icon"
+            href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💬</text></svg>"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+        />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0"
+        />
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"
+            integrity="sha512-WJXVjqeINVpi5XXJ2jn0BSCfp0y80IKrYh731gLRnkAS9TKc5KNt/OfLtu+fCueqdWniouJ1ubM+VI/hbo7POQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+        <script src="js/your_messenger_wrapped.js"></script>
+        <script src="js/sketch.js"></script>
+        <script src="js/script.js"></script>
+    </head>
+    <body>
+        <div id="body-gradient">
+            <div id="saved-photo-gradient">
+                <div
+                    id="container"
+                    style="display: flex; flex-direction: column; gap: 20px"
+                >
+                    <div id="profile-photo">
+                        <h1
+                            style="
+                                position: absolute;
+                                left: 50%;
+                                top: 50%;
+                                transform: translate(-50%, -50%);
+                                font-size: 60px;
+                                text-align: center;
+                                color: white;
+                                z-index: 20;
+                                font-weight: 900;
+                                margin: 0;
+                                padding: 0;
+                                line-height: 1em;
+                            "
+                        >
+                            Instagram Quấn
+                        </h1>
+                        <!-- @anotherbrowsertab took this photo of the ducks -->
+                    </div>
+                    <div id="top-row" class="row">
+                        <div class="block">
+                            <h1 id="top-people-or-num-messages-sent">
+                                Top inbox
+                            </h1>
+                            <ol id="top-people"></ol>
+                        </div>
+                        <div class="block">
+                            <h1>Bạn thả tim story của ai nhiều nhất?</h1>
+                            <ol id="top-phrases"></ol>
+                        </div>
+                    </div>
+                    <div id="bottom-row" class="row">
+                        <div class="block">
+                            <h1>Bạn đã gửi</h1>
+                            <p id="total-messages"></p>
+                            <blurb>tin nhắn</blurb>
+                        </div>
+                        <div class="block">
+                            <h1>Bạn đã thả</h1>
+                            <p id="total-reacts-and-stickers"></p>
+                            <blurb
+                                >trái tim cho
+                                <span id="total_storylikes_ppl"></span>
+                                người</blurb
+                            >
+                        </div>
+                    </div>
+                    <div id="footer">
+                        by <b>@bao.anh.bui</b> forked from
+                        <b>@anotherbrowsertab</b>
+                    </div>
+                </div>
             </div>
-            <div class="block">
-              <h1>Your Top Phrases</h1>
-              <ol id="top-phrases">
-              </ol>
-            </div>
-          </div>
-          <div id="bottom-row" class="row">
-            <div class="block">
-              <h1>Total Messages Sent</h1>
-              <p id="total-messages"></p>
-            </div>
-            <div class="block">
-              <h1>Total Reacts &amp; Stickers Sent</h1>
-              <p id="total-reacts-and-stickers"></p>
-            </div>
+            <a id="pause-button">
+                <span id="pause-button-icon" class="material-symbols-outlined"
+                    >pause</span
+                >
+                <span id="pause-button-text">Pause</span>
+            </a>
         </div>
-          <div id="footer">
-            <a target="_blank" href="https://www.instagram.com/anotherbrowsertab/">&#64;anotherbrowsertab</a>
-            <span>&#35;MESSENGERWRAPPED</span>
-          </div>
-        </div>
-      </div>
-      <a id="pause-button">
-        <span id="pause-button-icon" class="material-symbols-outlined">pause</span>
-        <span id="pause-button-text">Pause</span>
-      </a>
-    </div>
-  </body>
+    </body>
 </html>
