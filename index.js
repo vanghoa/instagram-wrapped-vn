@@ -1,6 +1,7 @@
 async function readDirectory() {
     let story_likes_data = {};
     let messages_data = {};
+    let liked_posts_data = {};
     let total_messages = 0;
     let total_reacts_and_stickers = 0;
     let LIMIT = 10;
@@ -46,13 +47,32 @@ async function readDirectory() {
                     : result.getFileHandle(name);
             }
         }
-
         // get name
         const personal_information = await getJSON(
             'personal_information/personal_information.json'
         );
-        const your_name =
-            personal_information.profile_user[0].string_map_data.Name.value;
+        const your_name = getUTF8String(
+            personal_information.profile_user[0].string_map_data.Name.value
+        );
+        const your_user_name =
+            personal_information.profile_user[0].string_map_data.Username.value;
+
+        //get blocked
+        const blocked_number = (
+            await getJSON('followers_and_following/blocked_accounts.json')
+        ).relationships_blocked_users.length;
+
+        //get liked posts
+        const liked_posts = (await getJSON('likes/liked_posts.json'))
+            .likes_media_likes;
+        for (const { title } of liked_posts) {
+            setDefault(liked_posts_data, title, 0);
+            liked_posts_data[title]++;
+        }
+        delete liked_posts_data[your_user_name];
+        liked_posts_data = Object.entries(liked_posts_data)
+            .sort((a, b) => b[1] - a[1]) // Sort in descending order based on the values
+            .slice(0, LIMIT);
 
         // get story_likes
         const story_likes = (
@@ -151,6 +171,8 @@ async function readDirectory() {
             top_story_likes: story_likes_data,
             total_story_likes: total_story_likes,
             total_story_likes_ppl: total_story_likes_ppl,
+            liked_posts_data: liked_posts_data,
+            blocked_number: blocked_number,
         };
 
         console.log(output_data);
@@ -254,6 +276,9 @@ function dataPopulation(yourData) {
 
     document.querySelector('#total_storylikes_ppl').innerText =
         yourData.total_story_likes_ppl.toLocaleString();
+
+    document.querySelector('#blocked-number').innerText =
+        yourData.blocked_number;
 }
 
 function secondsToHoursMinutes(seconds) {

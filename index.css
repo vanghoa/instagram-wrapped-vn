@@ -21,49 +21,34 @@ greenspan {
 }
 
 body {
-    height: 100vh;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 400px;
-    z-index: 1;
+    min-height: 100vh;
+    height: max-content;
 }
 
 #body-gradient {
-    width: 100vw;
-    min-height: 900px;
-    height: 100%;
-    position: absolute;
+    min-height: 100vh;
     background: rgb(84, 32, 172);
     background-size: cover;
     background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
 }
 
 #saved-photo-gradient {
-    width: 600px;
-    height: 900px;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
+    border-radius: 20px;
+    min-width: 600px;
     background: rgb(229, 129, 46);
+    margin: 80px 0;
+    display: flex;
+    justify-content: center;
 }
 
 #container {
-    width: 500px;
-    height: fit-content;
-    border-radius: 8px;
+    width: 100%;
+    border-radius: 20px;
     background-color: rgb(238, 170, 213);
     color: rgb(19, 20, 18);
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
+    margin: 40px;
 }
 
 h1 {
@@ -234,4 +219,10 @@ summary greenspan {
 
 summary:hover greenspan {
     display: block;
+}
+
+#blocked-number {
+    font-size: 130px;
+    line-height: 0.9em;
+    color: blueviolet;
 }
