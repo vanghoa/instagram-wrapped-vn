@@ -126,7 +126,7 @@ if __name__ == "__main__":
 
   json_string = json.dumps(output_data, indent=2)
 
-  with open(get_file_path('./your_instagram_quan_is_here.html'), "w") as html_file:
+  with open(get_file_path('./your_instagram_quan_is_here.html'), "w", encoding="utf-8") as html_file:
     html_file.write(html(json_string))
 
   print(get_file_path('your_instagram_quan_is_here.html'))
