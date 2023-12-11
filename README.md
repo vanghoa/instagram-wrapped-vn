@@ -1,5 +1,5 @@
-# 2022 Instagram Wrapped
+# 2023 Instagram Wrapped
 
-by [@anotherbrowsertab](https://www.instagram.com/anotherbrowsertab/)
+by [@bao.anh.bui](https://www.instagram.com/bao.anh.bui/)
 
-modified by [@bao.anh.bui](https://www.instagram.com/bao.anh.bui/)
+forked from [@anotherbrowsertab](https://www.instagram.com/anotherbrowsertab/)
