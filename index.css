@@ -36,15 +36,12 @@ body {
 
 #saved-photo-gradient {
     border-radius: 20px;
-    min-width: 600px;
     background: rgb(229, 129, 46);
     margin: 80px 0;
-    display: flex;
-    justify-content: center;
+    max-width: 90vw;
 }
 
 #container {
-    width: 100%;
     border-radius: 20px;
     background-color: rgb(238, 170, 213);
     color: rgb(19, 20, 18);
@@ -109,6 +106,7 @@ li {
 
 #profile-photo {
     width: 235px;
+    max-width: 100%;
     height: 235px;
     background: rgb(245, 228, 51);
     display: block;
@@ -116,6 +114,10 @@ li {
     margin-left: auto;
     margin-right: auto;
     z-index: 2;
+}
+
+canvas {
+    max-width: 100%;
 }
 
 #profile-photo img {
@@ -170,13 +172,13 @@ a:visited {
 }
 
 #pause-button {
-    top: 50px;
+    top: 10px;
+    right: 10px;
     font-size: 36px;
     border-radius: 0;
-    padding: 0.5em;
+    padding: 0.2em;
     z-index: 3;
     position: fixed;
-    right: 50px;
     color: rgb(255, 255, 255);
     background: rgb(229, 129, 46);
     font-family: Montserrat, sans-serif;
@@ -318,10 +320,17 @@ summary:hover greenspan {
     border: 5px blueviolet solid;
     margin: 0 auto;
     display: block;
+    max-width: calc(100% - 10px);
 }
 
 #instruction li img:hover {
     transform: scale(1.4);
+}
+
+#instruction h1 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.2em;
 }
 
 #instruction li img.ver {
@@ -332,7 +341,7 @@ summary:hover greenspan {
 #instruction li p {
     font-weight: bold;
     font-size: 1.2em;
-    width: 20em;
+    max-width: 20em;
     text-align: center;
     margin: 0 auto;
     margin-bottom: 20px;
@@ -350,6 +359,8 @@ button {
 
 #readDirectory {
     font-size: 1.2em;
+    width: fit-content;
+    margin: 60px auto;
 }
 
 #error {
@@ -363,4 +374,58 @@ button {
 #user-name {
     font-size: inherit;
     word-break: break-all;
+    display: block;
+}
+
+#profile-photo h1 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 500px;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    text-align: center;
+    color: white;
+    z-index: 20;
+    font-weight: 900;
+    margin: 0;
+    padding: 0;
+    line-height: 1em;
+    max-width: 90vw;
+}
+
+#mobile {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: blueviolet;
+    z-index: 100;
+    font-weight: 900;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    padding: 10%;
+    box-sizing: border-box;
+    text-align: center;
+    color: white;
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    #profile-photo h1 {
+        font-size: 50px;
+    }
+}
+
+@media (hover: none) {
+    #mobile {
+        display: block;
+    }
+    #body-gradient {
+        display: none;
+    }
 }

@@ -33,27 +33,12 @@
         <script src="index.js"></script>
     </head>
     <body>
+        <div id="mobile">Cái này không hoạt động trên mobile được</div>
         <div id="body-gradient">
             <div id="saved-photo-gradient">
                 <div id="container">
                     <div id="profile-photo">
-                        <h1
-                            style="
-                                position: absolute;
-                                left: 50%;
-                                top: 50%;
-                                width: 500px;
-                                transform: translate(-50%, -50%);
-                                font-size: 60px;
-                                text-align: center;
-                                color: white;
-                                z-index: 20;
-                                font-weight: 900;
-                                margin: 0;
-                                padding: 0;
-                                line-height: 1em;
-                            "
-                        >
+                        <h1>
                             Instagram Wrapped 2023
                             <span id="user-name">Tiếng Viet</span>
                         </h1>
@@ -62,7 +47,7 @@
                         <div id="top-row" class="row">
                             <div class="block">
                                 <h1
-                                    style="width: 13em"
+                                    style="max-width: 13em"
                                     id="top-people-or-num-messages-sent"
                                 >
                                     Top cái tên luôn nằm trong dm
@@ -70,7 +55,7 @@
                                 <ol id="top-people"></ol>
                             </div>
                             <div class="block">
-                                <h1 style="width: 13em">
+                                <h1 style="max-width: 13em">
                                     Bạn hay thả tim story của ai? 🤨
                                 </h1>
                                 <ol id="top-phrases"></ol>
@@ -86,7 +71,10 @@
                                 <h1>Bạn đã để lại</h1>
                                 <p id="total-reacts-and-stickers"></p>
                                 <blurb
-                                    style="width: 13em; display: inline-block"
+                                    style="
+                                        max-width: 13em;
+                                        display: inline-block;
+                                    "
                                     >trái tim trên story của
                                     <span id="total_storylikes_ppl"></span>
                                     người</blurb
@@ -164,6 +152,7 @@
                         </div>
                     </section>
                     <ol id="instruction" class="section">
+                        <h1>Hướng dẫn</h1>
                         <li>
                             <p>
                                 Tìm 'Your activity' ở phần 'More' trên Instagram
