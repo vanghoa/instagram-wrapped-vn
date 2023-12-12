@@ -33,18 +33,9 @@
         <script src="index.js"></script>
     </head>
     <body>
-        <button
-            style="position: fixed; left: 0; top: 0; z-index: 200"
-            onclick="readDirectory()"
-        >
-            Read Directory
-        </button>
         <div id="body-gradient">
             <div id="saved-photo-gradient">
-                <div
-                    id="container"
-                    style="display: flex; flex-direction: column; gap: 20px"
-                >
+                <div id="container">
                     <div id="profile-photo">
                         <h1
                             style="
@@ -63,72 +54,199 @@
                                 line-height: 1em;
                             "
                         >
-                            Instagram Quấn 2023
+                            Instagram Quấn 2023 <span id="user-name"></span>
                         </h1>
                         <!-- @anotherbrowsertab took this photo of the ducks -->
                     </div>
-                    <div id="top-row" class="row">
-                        <div class="block">
-                            <h1
-                                style="width: 13em"
-                                id="top-people-or-num-messages-sent"
-                            >
-                                Top cái tên luôn nằm trong dm
-                            </h1>
-                            <ol id="top-people"></ol>
+                    <section id="main" class="hidden section">
+                        <div id="top-row" class="row">
+                            <div class="block">
+                                <h1
+                                    style="width: 13em"
+                                    id="top-people-or-num-messages-sent"
+                                >
+                                    Top cái tên luôn nằm trong dm
+                                </h1>
+                                <ol id="top-people"></ol>
+                            </div>
+                            <div class="block">
+                                <h1 style="width: 13em">
+                                    Bạn hay thả tim story của ai? 🤨
+                                </h1>
+                                <ol id="top-phrases"></ol>
+                            </div>
                         </div>
-                        <div class="block">
-                            <h1 style="width: 13em">
-                                Bạn hay (tự nhiên) thả tim story của ai? 🤨
-                            </h1>
-                            <ol id="top-phrases"></ol>
+                        <div id="bottom-row" class="row">
+                            <div class="block">
+                                <h1>Bạn đã gửi</h1>
+                                <p id="total-messages"></p>
+                                <blurb>tin nhắn</blurb>
+                            </div>
+                            <div class="block">
+                                <h1>Bạn đã để lại</h1>
+                                <p id="total-reacts-and-stickers"></p>
+                                <blurb
+                                    style="width: 13em; display: inline-block"
+                                    >trái tim trên story của
+                                    <span id="total_storylikes_ppl"></span>
+                                    người</blurb
+                                >
+                            </div>
                         </div>
-                    </div>
-                    <div id="bottom-row" class="row">
-                        <div class="block">
-                            <h1>Bạn đã gửi</h1>
-                            <p id="total-messages"></p>
-                            <blurb>tin nhắn</blurb>
-                        </div>
-                        <div class="block">
-                            <h1>Bạn ... đã ... để lại</h1>
-                            <p id="total-reacts-and-stickers"></p>
-                            <blurb style="width: 13em; display: inline-block"
-                                >con tim trên story của
-                                <span id="total_storylikes_ppl"></span>
-                                người</blurb
-                            >
-                        </div>
-                    </div>
-                    <div
-                        class="row"
-                        style="
-                            justify-content: center;
-                            border-radius: 20px;
-                            background-color: white;
-                            color: blueviolet;
-                        "
-                    >
                         <div
+                            class="row"
                             style="
-                                text-align: center;
-                                width: 20em;
-                                flex-grow: 0;
-                                margin: 15px 0;
+                                justify-content: center;
+                                border-radius: 20px;
+                                background-color: white;
+                                color: blueviolet;
+                                background-image: url('bonghoate.png');
+                                background-repeat: repeat;
+                                background-size: contain;
                             "
-                            class="block"
                         >
-                            <h1 style="margin: 0; color: blueviolet">
-                                trao giải bông hoa tệ nhất
-                            </h1>
-                            <p id="blocked-number"></p>
-                            <blurb>người đã bị bạn blocked</blurb> <br />
-                            <blurb
-                                >thật vui vì chúng ta không cần người không cần
-                                chúng ta</blurb
+                            <div
+                                style="
+                                    text-align: center;
+                                    max-width: 30em;
+                                    flex-grow: 0;
+                                    margin: 15px 0;
+                                    display: flex;
+                                    flex-direction: column;
+                                    justify-content: center;
+                                    align-items: center;
+                                    gap: 1em;
+                                "
+                                class="block"
                             >
+                                <h1 id="blocked-note">
+                                    trao giải bông hoa tệ nhất
+                                </h1>
+                                <div class="blocked-section">
+                                    <p id="blocked-number"></p>
+                                    <blurb>người đã bị bạn blocked</blurb>
+                                    <br />
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <div
+                            class="row"
+                            style="
+                                justify-content: center;
+                                border-radius: 20px;
+                                background-color: white;
+                            "
+                        >
+                            <div
+                                style="
+                                    text-align: center;
+                                    width: 100%;
+                                    flex-grow: 0;
+                                    margin: 15px 0;
+                                "
+                                class="block"
+                            >
+                                <h1 style="margin-top: 0">
+                                    Trong năm nay, 5 người này đã tìm thấy bạn
+                                </h1>
+                                <ul
+                                    style="position: relative"
+                                    id="followers-list"
+                                    class="randompos_ul"
+                                ></ul>
+                                <br />
+                                <blurb id="thank-you"></blurb> <br />
+                                <br />
+                                <button onclick="randomfollowers()">
+                                    tôi không thích, tìm 5 người khác
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                    <ol id="instruction" class="section">
+                        <li>
+                            <p>
+                                Tìm 'Your activity' ở phần 'More' trên Instagram
+                            </p>
+                            <img class="ver" src="instruction/ins1.png" />
+                        </li>
+                        <li>
+                            <p>
+                                Vô phần 'Download your information', bấm
+                                'Continue'
+                            </p>
+                            <img src="instruction/ins2.png" />
+                        </li>
+                        <li>
+                            <p>
+                                Nó sẽ mở ra cái Accounts Center của Meta, chọn
+                                'Request a download'
+                            </p>
+                            <img src="instruction/ins3.png" />
+                        </li>
+                        <li>
+                            <p>Chọn account instagram của bạn</p>
+                            <img src="instruction/ins4.png" />
+                        </li>
+                        <li>
+                            <p>Chọn 'Complete copy'</p>
+                            <img src="instruction/ins5.png" />
+                        </li>
+                        <li>
+                            <p>
+                                Chọn options theo hình: <br />
+                                - Date range: Last year <br />
+                                - Format: JSON (nhớ chọn JSON!) <br />
+                                - Media quality: Low (tải cho nhanh)
+                            </p>
+                            <img src="instruction/ins6.png" />
+                        </li>
+                        <li>
+                            <p>
+                                Chờ cho pending download, bình thường chắc tầm
+                                nửa tiếng - nó sẽ notify qua email
+                            </p>
+                            <img src="instruction/ins7.png" />
+                        </li>
+                        <li>
+                            <p>
+                                Sau khi xong chọn 'Download' để tải về, file
+                                size sẽ có thể khá nặng lên tới 1 - 1.5GB
+                            </p>
+                            <img src="instruction/ins8.png" />
+                        </li>
+                        <li>
+                            <p>
+                                Tải về sẽ được 1 file .zip, giải nén file ra 1
+                                folder như hình
+                            </p>
+                            <img
+                                style="margin-bottom: 20px"
+                                src="instruction/ins9.png"
+                            />
+                            <img src="instruction/ins10.png" />
+                        </li>
+                        <li>
+                            <p>
+                                Kiểm tra xem có thấy bên trong folder giải nén
+                                sẽ có một đống file như hình
+                            </p>
+                            <img src="instruction/ins11.png" />
+                        </li>
+                        <li>
+                            <p>
+                                Click cái nút ở dưới và chọn folder vừa giải nén
+                                (mà bên trong có đống file). Yên tâm! Dữ liệu
+                                của bạn toàn bộ được processed locally - hoàn
+                                toàn không có server upload nào ở đây
+                            </p>
+                            <img src="instruction/ins12.png" />
+                        </li>
+                        <button id="readDirectory" onclick="readDirectory()">
+                            Chọn folder vừa giải nén
+                        </button>
+                        <div id="error"></div>
+                    </ol>
                     <div id="footer">
                         by <b>@bao.anh.bui</b> forked from
                         <b>@anotherbrowsertab</b>
@@ -139,7 +257,7 @@
                 <span id="pause-button-icon" class="material-symbols-outlined"
                     >pause</span
                 >
-                <span id="pause-button-text">Pause</span>
+                <span id="pause-button-text">Dừng animation</span>
             </button>
         </div>
     </body>
