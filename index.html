@@ -31,6 +31,7 @@
         ></script>
         <script src="sketch.js"></script>
         <script src="index.js"></script>
+        <script src="html2canvas.js"></script>
     </head>
     <body>
         <div id="mobile">Cái này không hoạt động trên mobile được</div>
@@ -144,9 +145,30 @@
                                 ></ul>
                                 <br />
                                 <blurb id="thank-you"></blurb> <br />
-                                <br />
+
                                 <button onclick="randomfollowers()">
-                                    tôi không thích, tìm 5 người khác
+                                    tìm 5 người khác
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            class="row"
+                            style="justify-content: center; border-radius: 20px"
+                        >
+                            <div
+                                style="
+                                    text-align: center;
+                                    width: 100%;
+                                    flex-grow: 0;
+                                    margin: 15px 0;
+                                "
+                                class="block"
+                            >
+                                <button
+                                    id="screenshot"
+                                    onclick="screenshot(this)"
+                                >
+                                    chụp ảnh màn hình
                                 </button>
                             </div>
                         </div>
@@ -242,6 +264,7 @@
                     </div>
                 </div>
             </div>
+            <div id="capture"></div>
             <button id="pause-button" onclick="pauseStartAnimation()">
                 <span id="pause-button-icon" class="material-symbols-outlined"
                     >pause</span

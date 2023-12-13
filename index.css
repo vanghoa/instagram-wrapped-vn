@@ -32,6 +32,8 @@ body {
     background-repeat: no-repeat;
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 #saved-photo-gradient {
@@ -75,15 +77,6 @@ blurb {
 
 li {
     counter-increment: custom;
-}
-
-#main ol li:before {
-    content: counter(custom) ' ';
-    padding-right: 4px;
-}
-
-#main ol li:first-child {
-    counter-reset: custom;
 }
 
 #main ol li:first-child {
@@ -198,36 +191,22 @@ a:visited {
     margin-right: 8px;
 }
 
-details {
-    user-select: none;
+.summary {
     display: inline;
 }
 
-details > summary span.icon {
-    height: 24px;
-    transition: all 0.3s;
-    margin-left: auto;
-}
-
-details[open] summary span.icon {
-    transform: rotate(180deg);
-}
-
-summary {
-    display: inline;
+.details greenspan {
     cursor: pointer;
-}
-
-summary::-webkit-details-marker {
-    display: none;
-}
-
-summary greenspan {
-    display: none;
-}
-
-summary:hover greenspan {
     display: block;
+    width: fit-content;
+    padding: 0 0.2em;
+    border-radius: 1em;
+}
+
+.details greenspan span {
+    position: relative;
+    bottom: 0.1em;
+    font-size: 0.8em;
 }
 
 #blocked-number {
@@ -413,6 +392,28 @@ button {
     text-align: center;
     color: white;
     display: none;
+}
+
+#capture canvas {
+    border: 5px white solid;
+    border-radius: 20px;
+    display: block;
+}
+
+#capture {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-direction: column;
+}
+
+#screenshot {
+    max-width: 20em;
+}
+
+[onclick='randomfollowers()'] {
+    margin-top: 1em;
 }
 
 @media screen and (max-width: 600px) {

@@ -39,15 +39,19 @@ async function readDirectory() {
                 : result.getFileHandle(name);
         }
     }
-    async function JSONCheck(path) {
+    async function JSONCheck(path, log = true) {
         try {
             return await getJSON(path);
         } catch (error) {
-            document.querySelector(
-                '#error'
-            ).innerHTML += `- :/ cái file ${path} này không tồn tại - xin bạn hãy kiểm tra lại <br>- Chi tiết lỗi: ${error}<br><br>`;
-            document.querySelector('#instruction').classList.remove('hidden');
-            document.querySelector('#main').classList.add('hidden');
+            log &&
+                (document.querySelector(
+                    '#error'
+                ).innerHTML += `- :/ cái file ${path} này không tồn tại hoặc file.zip lúc tải/giải nén đã bị hư hỏng - xin bạn hãy nhắn tin cho @bao.anh.bui <br>- Chi tiết lỗi: ${error}<br><br>`);
+            log &&
+                document
+                    .querySelector('#instruction')
+                    .classList.remove('hidden');
+            log && document.querySelector('#main').classList.add('hidden');
             return false;
         }
     }
@@ -75,7 +79,7 @@ async function readDirectory() {
         }
         document.querySelector(
             '#error'
-        ).innerHTML += `- :/ Bạn có chắc bạn chọn đúng folder không? Đảm bảo rằng folder bạn chọn là folder chứa mấy cái folder con bên trong ví dự như 'personal_information', 'messages', 'followers_and_following',... <br>- Chi tiết lỗi: ${error}<br><br>`;
+        ).innerHTML += `- :/ Bạn có chắc bạn chọn đúng folder không? Đảm bảo rằng folder bạn chọn là folder chứa mấy cái folder con bên trong ví dự như 'personal_information', 'messages', 'followers_and_following',... Bạn có thể thử tải lại/giải nén lại file zip <br>- Chi tiết lỗi: ${error}<br><br>`;
         document.querySelector('#instruction').classList.remove('hidden');
         document.querySelector('#main').classList.add('hidden');
         return;
@@ -85,17 +89,15 @@ async function readDirectory() {
         'personal_information/personal_information.json'
     );
     const blocked_check = await JSONCheck(
-        'followers_and_following/blocked_accounts.json'
+        'followers_and_following/blocked_accounts.json',
+        false
     );
     const story_likes_check = await JSONCheck(
-        'story_sticker_interactions/story_likes.json'
+        'story_sticker_interactions/story_likes.json',
+        false
     );
 
-    if (
-        personal_information == false ||
-        blocked_check == false ||
-        story_likes_check == false
-    ) {
+    if (personal_information == false) {
         return;
     }
 
@@ -125,7 +127,7 @@ async function readDirectory() {
 
         //get blocked
         const blocked_number =
-            blocked_check?.relationships_blocked_users.length ?? 0;
+            blocked_check?.relationships_blocked_users?.length ?? 0;
         document.querySelector('#blocked-note').innerText =
             blocked_number == 0
                 ? 'Thật luôn?'
@@ -316,18 +318,17 @@ function dataPopulation(yourData) {
     // populate top people
     for (let i = 0; i < yourData.top_inbox.length; i++) {
         let el = document.createElement('li');
-        let details = yourData.top_inbox[i].name;
+        let details = `${i + 1} ${yourData.top_inbox[i].name}`;
         if (i <= 2) {
             const { hours, minutes } = secondsToHoursMinutes(
                 yourData.top_inbox[i].call_duration
             );
             details = `
-                <details>
-                <summary>${
-                    yourData.top_inbox[i].name
-                } <greenspan> (bấm để xem thêm)</greenspan>
-                </summary>
-                <p>
+                <div class="details">
+                <div  class="summary">${i + 1} ${yourData.top_inbox[i].name}
+                </div>
+                <greenspan onclick="togglehidden('info${i}');"><span>bấm để xem thêm</span></greenspan>
+                <p id="info${i}" class="hidden">
                     ${
                         yourData.top_inbox[i].call == 0
                             ? ''
@@ -340,7 +341,7 @@ function dataPopulation(yourData) {
                         i
                     ].messages.toLocaleString()} tin nhắn
                 </p>
-                </details>`;
+                </div>`;
         }
         el.innerHTML = details;
         topPeople.appendChild(el);
@@ -349,7 +350,9 @@ function dataPopulation(yourData) {
     // populate top story likes
     for (let i = 0; i < yourData.top_story_likes.length; i++) {
         let el = document.createElement('li');
-        el.innerHTML = `@${yourData.top_story_likes[i][0]} <greenspan>(${yourData.top_story_likes[i][1]} lần)</greenspan>`;
+        el.innerHTML = `${i + 1} @${
+            yourData.top_story_likes[i][0]
+        } <greenspan>(${yourData.top_story_likes[i][1]} lần)</greenspan>`;
         topStoryLikes.appendChild(el);
     }
 
@@ -371,6 +374,11 @@ function dataPopulation(yourData) {
     document.querySelector(
         '#user-name'
     ).innerText = ` của @${yourData.user_name}`;
+
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth', // Use smooth scrolling
+    });
 }
 
 function secondsToHoursMinutes(seconds) {
@@ -404,4 +412,35 @@ function randomfollowers() {
         random_followers_elem.appendChild(el);
     }
     thank_you_msg.innerText = getRandomItems(thank_you_note, 1);
+}
+
+function screenshot(e) {
+    html2canvas(document.querySelector('#saved-photo-gradient'), {
+        onclone: (doc) => {
+            let dom = [
+                ...doc.querySelectorAll('.details greenspan'),
+                ...doc.querySelectorAll('button'),
+            ];
+            dom.forEach((elem) => {
+                elem.remove();
+            });
+        },
+    }).then((canvas) => {
+        document.querySelector('#capture').appendChild(canvas);
+        const dataUrl = canvas.toDataURL('image/png');
+
+        // Create a download link
+        const downloadLink = document.createElement('a');
+        downloadLink.href = dataUrl;
+        downloadLink.download = 'screenshot.png'; // Specify the filename
+
+        // Trigger a click on the download link to start the download
+        downloadLink.click();
+    });
+    e.innerHTML =
+        'ảnh đã được tự động lưu vào máy, nếu chưa, hãy kéo xuống dưới để lưu ảnh';
+}
+
+function togglehidden(id) {
+    document.querySelector('#' + id).classList.toggle('hidden');
 }
