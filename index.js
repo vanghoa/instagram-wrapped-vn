@@ -216,17 +216,19 @@ async function readDirectory() {
                         sender_name = getUTF8String(m.sender_name);
                         if (sender_name == your_name) {
                             total_messages++;
-                        } else if (
-                            sender_name != 'Instagram User' &&
-                            sender_name != your_name &&
+                        }
+
+                        if (
+                            default_name != 'Instagram User' &&
+                            sender_name == your_name &&
                             !is_group_chat
                         ) {
-                            setDefault(messages_data, sender_name, {
+                            setDefault(messages_data, default_name, {
                                 call: 0,
                                 messages: 0,
                                 call_duration: 0,
                             });
-                            messages_data[sender_name].messages++;
+                            messages_data[default_name].messages++;
                         }
 
                         if (
