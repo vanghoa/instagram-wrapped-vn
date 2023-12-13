@@ -141,13 +141,13 @@ async function readDirectory() {
 
     try {
         // get name
-        const your_name = getUTF8String(
-            personal_information.profile_user[0].string_map_data.Name?.value ??
-                ''
-        );
         const your_user_name =
             personal_information.profile_user[0].string_map_data.Username.value;
 
+        const your_name = getUTF8String(
+            personal_information.profile_user[0].string_map_data.Name?.value ??
+                your_user_name
+        );
         // get followers
         const follow_directory = await getFolder('followers_and_following');
         for await (const [key, value] of follow_directory) {
