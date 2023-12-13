@@ -141,13 +141,17 @@ async function readDirectory() {
 
     try {
         // get name
+        const isVn =
+            personal_information.profile_user[0].string_map_data.hasOwnProperty(
+                'T\u00c3\u00aan ng\u00c6\u00b0\u00e1\u00bb\u009di d\u00c3\u00b9ng'
+            );
+        console.log(isVn);
         const your_user_name =
-            personal_information.profile_user[0].string_map_data.Username.value;
-
-        const your_name = getUTF8String(
-            personal_information.profile_user[0].string_map_data.Name?.value ??
-                your_user_name
-        );
+            personal_information.profile_user[0].string_map_data[
+                isVn
+                    ? 'T\u00c3\u00aan ng\u00c6\u00b0\u00e1\u00bb\u009di d\u00c3\u00b9ng'
+                    : 'Username'
+            ].value;
         // get followers
         const follow_directory = await getFolder('followers_and_following');
         for await (const [key, value] of follow_directory) {
@@ -208,6 +212,9 @@ async function readDirectory() {
                     //console.log(key_, key);
                     const default_name = getUTF8String(
                         data.participants[0].name
+                    );
+                    const your_name = getUTF8String(
+                        data.participants[data.participants.length - 1].name
                     );
 
                     const is_group_chat = data.participants.length > 2;
