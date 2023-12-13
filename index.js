@@ -39,6 +39,26 @@ async function readDirectory() {
                 : result.getFileHandle(name);
         }
     }
+    async function checkHTML(path) {
+        try {
+            path = path.split('/');
+            let result = dirHandle;
+            for (let i = 0; i < path.length; i++) {
+                result = await conditionalFileHandle(
+                    path[i],
+                    i < path.length - 1
+                );
+            }
+            return result.getFile() ? true : false;
+            function conditionalFileHandle(name, isDir) {
+                return isDir
+                    ? result.getDirectoryHandle(name)
+                    : result.getFileHandle(name);
+            }
+        } catch (error) {
+            return false;
+        }
+    }
     async function JSONCheck(path, log = true) {
         try {
             return await getJSON(path);
@@ -66,13 +86,22 @@ async function readDirectory() {
     followers_list = [];
 
     try {
-        const dirHandle_ = await window.showDirectoryPicker();
-        await dirHandle_.getDirectoryHandle('personal_information');
-        await dirHandle_.getDirectoryHandle('story_sticker_interactions');
-        await dirHandle_.getDirectoryHandle('messages');
-        await dirHandle_.getDirectoryHandle('followers_and_following');
-        //await dirHandle_.getDirectoryHandle('likes');
-        dirHandle = dirHandle_;
+        dirHandle = await recursiveCheck(await window.showDirectoryPicker());
+        async function recursiveCheck(dir) {
+            const entries = await dir.entries();
+            const entriesArray = [];
+            for await (const [key, value] of entries) {
+                entriesArray.push([key, value]);
+                if (key == 'personal_information') return dir;
+            }
+            for (const [key, value] of entriesArray) {
+                if (value.kind == 'file') continue;
+                dir = await recursiveCheck(value);
+                if (dir) return dir;
+            }
+            return false;
+        }
+        if (dirHandle == false) throw new Error('Folder này không đúng');
     } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') {
             return;
@@ -80,6 +109,15 @@ async function readDirectory() {
         document.querySelector(
             '#error'
         ).innerHTML += `- :/ Bạn có chắc bạn chọn đúng folder không? Đảm bảo rằng folder bạn chọn là folder chứa mấy cái folder con bên trong ví dự như 'personal_information', 'messages', 'followers_and_following',... Bạn có thể thử tải lại/giải nén lại file zip <br>- Chi tiết lỗi: ${error}<br><br>`;
+        document.querySelector('#instruction').classList.remove('hidden');
+        document.querySelector('#main').classList.add('hidden');
+        return;
+    }
+
+    if (await checkHTML('personal_information/personal_information.html')) {
+        document.querySelector(
+            '#error'
+        ).innerHTML += `- :/ Bạn ơi bạn check lại bước 6 - phải chọn format là JSON chứ không phải là HTML nhá <br>- Chi tiết lỗi: ${error}<br><br>`;
         document.querySelector('#instruction').classList.remove('hidden');
         document.querySelector('#main').classList.add('hidden');
         return;
