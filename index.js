@@ -130,6 +130,10 @@ async function readDirectory() {
         'followers_and_following/blocked_accounts.json',
         false
     );
+    const restricted_check = await JSONCheck(
+        'followers_and_following/restricted_accounts.json',
+        false
+    );
     const story_likes_check = await JSONCheck(
         'story_sticker_interactions/story_likes.json',
         false
@@ -176,6 +180,9 @@ async function readDirectory() {
                 ? ' Năm nay mọi người xung quanh rất tốt với bạn'
                 : getRandomItems(blocked_note, 1);
 
+        //get restricted
+        const restricted_number =
+            restricted_check?.relationships_restricted_users?.length ?? 0;
         //get liked posts
         /*
         const liked_posts = (await getJSON('likes/liked_posts.json'))
@@ -294,6 +301,7 @@ async function readDirectory() {
             liked_posts_data: liked_posts_data,
             blocked_number: blocked_number,
             followers_list: followers_list,
+            restricted_number: restricted_number,
         };
 
         console.log(output_data);
@@ -423,6 +431,11 @@ function dataPopulation(yourData) {
     document.querySelector(
         '#user-name'
     ).innerText = ` của @${yourData.user_name}`;
+
+    yourData.restricted_number > 0 &&
+        (document.querySelector('#restricted').innerText = `(${
+            yourData.blocked_number > 0 ? 'kèm' : 'nhưng có'
+        } ${yourData.restricted_number} người bị restricted)`);
 
     window.scrollTo({
         top: 0,
