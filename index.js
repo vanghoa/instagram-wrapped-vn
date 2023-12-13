@@ -168,7 +168,7 @@ async function readDirectory() {
             blocked_check?.relationships_blocked_users?.length ?? 0;
         document.querySelector('#blocked-note').innerText =
             blocked_number == 0
-                ? 'Thật luôn?'
+                ? ' Năm nay mọi người xung quanh rất tốt với bạn'
                 : getRandomItems(blocked_note, 1);
 
         //get liked posts
@@ -368,7 +368,8 @@ function dataPopulation(yourData) {
                 <greenspan onclick="togglehidden('info${i}');"><span>bấm để xem thêm</span></greenspan>
                 <p id="info${i}" class="hidden">
                     ${
-                        yourData.top_inbox[i].call == 0
+                        yourData.top_inbox[i].call == 0 ||
+                        (hours == 0 && minutes == 0)
                             ? ''
                             : `+ ${yourData.top_inbox[i].call} lần và
                     ${
