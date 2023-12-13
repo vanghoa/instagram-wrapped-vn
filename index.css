@@ -50,6 +50,8 @@ body {
     margin: 40px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 20px;
     padding: 20px;
 }
@@ -149,10 +151,10 @@ canvas {
     background-color: rgb(238, 170, 213);
     color: rgb(19, 20, 18);
     font-size: 14px;
-    padding: 26px 15px;
     bottom: 0;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
+    max-width: 30em;
 }
 
 #footer a:link,
