@@ -128,9 +128,9 @@ class ShapeBackground {
         } else if (c === 'pink') {
             nc = color(226, 116, 186);
         } else if (c === 'green') {
-            nc = color(0, 255, 17);
+            nc = color(0, 54, 255);
         } else if (c === 'yellow') {
-            nc = color(245, 252, 89);
+            nc = color(243, 0, 255);
         } else if (c === 'black') {
             nc = color(19, 20, 18);
         } else {

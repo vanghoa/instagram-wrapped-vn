@@ -26,6 +26,19 @@ async function readDirectory() {
             return result.getDirectoryHandle(name);
         }
     }
+    async function getFile(path) {
+        path = path.split('/');
+        let result = dirHandle;
+        for (let i = 0; i < path.length; i++) {
+            result = await conditionalFileHandle(path[i], i < path.length - 1);
+        }
+        return await result.getFile();
+        function conditionalFileHandle(name, isDir) {
+            return isDir
+                ? result.getDirectoryHandle(name)
+                : result.getFileHandle(name);
+        }
+    }
     async function getJSON(path) {
         path = path.split('/');
         let result = dirHandle;
@@ -84,6 +97,7 @@ async function readDirectory() {
     let dirHandle;
     let followers_object = {};
     followers_list = [];
+    let imageURL = false;
 
     try {
         dirHandle = await recursiveCheck(await window.showDirectoryPicker());
@@ -138,6 +152,18 @@ async function readDirectory() {
         'story_sticker_interactions/story_likes.json',
         false
     );
+    const profile_photo_uri = (
+        await JSONCheck('content/profile_photos.json', false)
+    )?.ig_profile_picture?.[0]?.uri;
+    console.log(profile_photo_uri);
+    if (profile_photo_uri) {
+        try {
+            imageURL = URL.createObjectURL(await getFile(profile_photo_uri));
+        } catch (e) {
+            imageURL = false;
+            console.log(e);
+        }
+    }
 
     if (personal_information == false) {
         return;
@@ -302,6 +328,7 @@ async function readDirectory() {
             blocked_number: blocked_number,
             followers_list: followers_list,
             restricted_number: restricted_number,
+            imageURL: imageURL,
         };
 
         console.log(output_data);
@@ -436,6 +463,12 @@ function dataPopulation(yourData) {
         (document.querySelector('#restricted').innerText = `(${
             yourData.blocked_number > 0 ? 'kèm' : 'nhưng có'
         } ${yourData.restricted_number} người bị restricted)`);
+
+    yourData.imageURL &&
+        ((document.querySelector('#profile-photo img').src = yourData.imageURL),
+        document
+            .querySelector('#profile-photo img')
+            .classList.remove('hidden'));
 
     window.scrollTo({
         top: 0,
