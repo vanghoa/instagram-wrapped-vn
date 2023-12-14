@@ -41,6 +41,7 @@ body {
     background: rgb(229, 129, 46);
     margin: 80px 0;
     max-width: 90vw;
+    width: min-content;
 }
 
 #container {
@@ -95,35 +96,8 @@ li {
     color: rgb(19, 20, 18);
 }
 
-#profile-photo {
-    width: 100%;
-    max-width: 100%;
-    height: 235px;
-    background: rgb(245, 228, 51);
-    display: block;
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    z-index: 2;
-}
-
 canvas {
     max-width: 100%;
-}
-
-#profile-photo img {
-    width: 14em;
-    height: 14em;
-    z-index: 3;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-#profile-photo canvas {
-    width: 100% !important;
-    height: 100% !important;
 }
 
 .row {
@@ -309,7 +283,6 @@ a:visited {
     border: 5px blueviolet solid;
     margin: 0 auto;
     display: block;
-    max-width: calc(100% - 10px);
 }
 
 #instruction li img:hover {
@@ -366,21 +339,49 @@ button {
     display: block;
 }
 
+#profile-info {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    gap: 1em;
+    width: fit-content;
+    padding: 1em;
+}
+
 #profile-photo h1 {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 500px;
-    transform: translate(-50%, -50%);
-    font-size: 60px;
-    text-align: center;
+    font-size: 50px;
     color: white;
-    z-index: 20;
     font-weight: 900;
     margin: 0;
     padding: 0;
     line-height: 1em;
-    max-width: 90vw;
+}
+
+#profile-photo img {
+    max-width: 14em;
+    max-height: 14em;
+    border-radius: 20px;
+}
+
+#profile-photo {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 2;
+}
+
+#profile-photo canvas {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    border-radius: 20px;
 }
 
 #mobile {

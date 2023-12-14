@@ -455,9 +455,7 @@ function dataPopulation(yourData) {
     document.querySelector('#blocked-number').innerText =
         yourData.blocked_number;
 
-    document.querySelector(
-        '#user-name'
-    ).innerText = ` của @${yourData.user_name}`;
+    document.querySelector('#user-name').innerText = `@${yourData.user_name}`;
 
     yourData.restricted_number > 0 &&
         (document.querySelector('#restricted').innerText = `(${
