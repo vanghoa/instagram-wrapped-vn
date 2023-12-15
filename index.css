@@ -409,8 +409,7 @@ button {
     background-color: blueviolet;
     z-index: 100;
     font-weight: 900;
-    font-size: 40px;
-    display: flex;
+    font-size: 20px;
     justify-content: center;
     align-items: center;
     align-content: center;
@@ -452,7 +451,7 @@ button {
 
 @media (hover: none) {
     #mobile {
-        display: block;
+        display: flex;
     }
     #body-gradient {
         display: none;
