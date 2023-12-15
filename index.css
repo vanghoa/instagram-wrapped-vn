@@ -8,6 +8,10 @@
     padding: 0;
 }
 
+:root {
+    --orange: rgb(229, 129, 46);
+}
+
 #background {
     position: absolute;
     left: 0;
@@ -38,7 +42,7 @@ body {
 
 #saved-photo-gradient {
     border-radius: 20px;
-    background: rgb(229, 129, 46);
+    background: var(--orange);
     margin: 80px 0;
     max-width: 90vw;
     width: min-content;
@@ -66,6 +70,13 @@ h1 {
 
 #main {
     min-width: 500px;
+}
+
+em {
+    text-decoration: underline;
+    font-size: inherit;
+    font-style: normal;
+    color: blue;
 }
 
 #main ol,
@@ -151,7 +162,7 @@ a:visited {
     z-index: 3;
     position: fixed;
     color: rgb(255, 255, 255);
-    background: rgb(229, 129, 46);
+    background: var(--orange);
     font-family: Montserrat, sans-serif;
     cursor: pointer;
     display: inline-flex;
@@ -323,6 +334,7 @@ button {
     font-size: 1.2em;
     width: fit-content;
     margin: 60px auto;
+    box-shadow: 0 0 40px 10px blueviolet;
 }
 
 #error {
