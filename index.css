@@ -64,6 +64,10 @@ h1 {
     margin: 0.8em 0;
 }
 
+#main {
+    min-width: 500px;
+}
+
 #main ol,
 #main ul {
     padding-left: 0;
@@ -94,10 +98,6 @@ li {
 
 #main li::marker {
     color: rgb(19, 20, 18);
-}
-
-canvas {
-    max-width: 100%;
 }
 
 .row {
@@ -349,7 +349,7 @@ button {
 }
 
 #profile-photo h1 {
-    font-size: 50px;
+    font-size: 40px;
     color: white;
     font-weight: 900;
     margin: 0;
@@ -357,10 +357,15 @@ button {
     line-height: 1em;
 }
 
+#profile-photo img.hidden + h1 {
+    text-align: center;
+}
+
 #profile-photo img {
-    max-width: 14em;
-    max-height: 14em;
+    max-width: 8em;
+    max-height: 8em;
     border-radius: 20px;
+    border: 5px solid white;
 }
 
 #profile-photo {
@@ -371,17 +376,16 @@ button {
     margin-left: auto;
     margin-right: auto;
     z-index: 2;
+    overflow: hidden;
+    border-radius: 20px;
 }
 
 #profile-photo canvas {
-    width: 100% !important;
-    height: 100% !important;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: -1;
-    border-radius: 20px;
 }
 
 #mobile {
@@ -407,6 +411,7 @@ button {
 
 #capture canvas {
     border: 5px white solid;
+    max-width: 100%;
     border-radius: 20px;
     display: block;
 }

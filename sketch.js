@@ -3,7 +3,11 @@ const COLORS = ['orange', 'pink', 'green', 'yellow', 'black', 'purple'];
 const NUM_SHAPE_LAYERS = getRandom(5, 8);
 const MIN_OBJ = 4;
 const MAX_OBJ = 20;
-const PFP_SIZE = 235;
+const profile_data = document.querySelector('#profile-photo');
+const PFP_SIZE = {
+    w: profile_data.clientWidth * 2,
+    h: profile_data.clientHeight * 3,
+};
 const FRAME_RATE = 4;
 const HOLD_LENGTH = FRAME_RATE;
 let pContent;
@@ -96,7 +100,7 @@ class ShapeBackground {
         if (this.shapes[i] === 'square') {
             for (let j = 0; j < this.numObj[i]; j++) {
                 push();
-                translate(PFP_SIZE / 2, PFP_SIZE / 2);
+                translate(PFP_SIZE.w / 2, PFP_SIZE.h / 2);
                 rotate((TWO_PI * j) / this.numObj[i]);
                 rect(this.radii[i], 0, this.sizes[i], this.sizes[i]);
                 pop();
@@ -104,7 +108,7 @@ class ShapeBackground {
         } else if (this.shapes[i] === 'circle') {
             for (let j = 0; j < this.numObj[i]; j++) {
                 push();
-                translate(PFP_SIZE / 2, PFP_SIZE / 2);
+                translate(PFP_SIZE.w / 2, PFP_SIZE.h / 2);
                 rotate((TWO_PI * j) / this.numObj[i]);
                 circle(this.radii[i], 0, this.sizes[i]);
                 pop();
@@ -113,7 +117,7 @@ class ShapeBackground {
             // triangle
             for (let j = 0; j < this.numObj[i]; j++) {
                 push();
-                translate(PFP_SIZE / 2, PFP_SIZE / 2);
+                translate(PFP_SIZE.w / 2, PFP_SIZE.h / 2);
                 rotate((TWO_PI * j) / this.numObj[i]);
                 triangle(this.radii[i], this.radii[i], 0, 40, 40, 10);
                 pop();
@@ -142,11 +146,11 @@ class ShapeBackground {
 }
 
 function setup() {
-    pCnv = createCanvas(PFP_SIZE, PFP_SIZE);
+    pCnv = createCanvas(PFP_SIZE.w, PFP_SIZE.h);
     pCnv.parent(document.getElementById('profile-photo'));
     rectMode(CENTER);
     noStroke();
-    pContent = new ShapeBackground(PFP_SIZE, PFP_SIZE);
+    pContent = new ShapeBackground(PFP_SIZE.w / 3, PFP_SIZE.h / 3);
     frameRate(FRAME_RATE);
     background(color(84, 32, 172));
 }
