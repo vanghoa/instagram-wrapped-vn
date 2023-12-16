@@ -559,6 +559,7 @@ onload = (e) => {
     getRandomBorderRadius('#blocked-note');
     getRandomBorderRadius('#footer', 50);
     getRandomBorderRadius('#thank-you', 50);
+    getRandomBorderRadius('#inshead', 50);
     document.querySelectorAll('#instruction li img').forEach((elem) => {
         randomBorderRadius(elem, 70);
     });
