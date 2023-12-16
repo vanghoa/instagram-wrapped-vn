@@ -147,6 +147,10 @@ li {
     font-weight: 700;
 }
 
+.details p {
+    font-weight: 100;
+}
+
 #footer {
     color: rgb(19, 20, 18);
     background-color: var(--lightpurple);
@@ -482,6 +486,13 @@ button {
 
 [onclick='randomfollowers()'] {
     margin-top: 1em;
+}
+
+#flower {
+    font-size: 1.3em;
+    line-height: 0.1em;
+    transform: translateY(0.1em);
+    display: inline-block;
 }
 
 #follower-row {

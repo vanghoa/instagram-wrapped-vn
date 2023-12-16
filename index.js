@@ -13,6 +13,8 @@ let blocked_note = [
     'Chặn những người không lành mạnh để bảo vệ không gian cá nhân của bạn',
     'Bộ an ninh quốc phòng xin thông báo',
 ];
+const atsymbol = getRandomItems('⚘✽✾✿❀❁❃❊❋✤✣⚜⚘ꕤꕥ☘'.split(''), 1);
+const at = `<span id="flower">${atsymbol}</span>`;
 
 async function readDirectory() {
     async function getFolder(path) {
@@ -434,7 +436,7 @@ function dataPopulation(yourData) {
     // populate top story likes
     for (let i = 0; i < yourData.top_story_likes.length; i++) {
         let el = document.createElement('li');
-        el.innerHTML = `${i + 1} @${
+        el.innerHTML = `${i + 1} ${at}${
             yourData.top_story_likes[i][0]
         } <greenspan>(${yourData.top_story_likes[i][1]} lần)</greenspan>`;
         topStoryLikes.appendChild(el);
@@ -455,7 +457,9 @@ function dataPopulation(yourData) {
     document.querySelector('#blocked-number').innerText =
         yourData.blocked_number;
 
-    document.querySelector('#user-name').innerText = `@${yourData.user_name}`;
+    document.querySelector(
+        '#user-name'
+    ).innerHTML = `${at}${yourData.user_name}`;
 
     document.querySelector('#vn').classList.remove('hidden');
     yourData.restricted_number > 0 &&
@@ -502,7 +506,7 @@ function randomfollowers() {
         el.style.left = `${left}%`;
         el.style.transform = `translateX(${-left}%)`;
         el.classList.add('randompos');
-        el.innerText = `@${random_followers[i]}`;
+        el.innerHTML = `${at}${random_followers[i]}`;
         random_followers_elem.appendChild(el);
     }
     thank_you_msg.innerText = getRandomItems(thank_you_note, 1);
