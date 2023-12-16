@@ -457,6 +457,7 @@ function dataPopulation(yourData) {
 
     document.querySelector('#user-name').innerText = `@${yourData.user_name}`;
 
+    document.querySelector('#vn').classList.remove('hidden');
     yourData.restricted_number > 0 &&
         (document.querySelector('#restricted').innerText = `(${
             yourData.blocked_number > 0 ? 'kèm' : 'nhưng có'
@@ -509,6 +510,7 @@ function randomfollowers() {
 
 function screenshot(e) {
     html2canvas(document.querySelector('#saved-photo-gradient'), {
+        backgroundColor: 'blueviolet',
         onclone: (doc) => {
             let dom = [
                 ...doc.querySelectorAll('.details greenspan'),
@@ -519,7 +521,9 @@ function screenshot(e) {
             });
         },
     }).then((canvas) => {
-        document.querySelector('#capture').appendChild(canvas);
+        const capture = document.querySelector('#capture');
+        capture.appendChild(canvas);
+        capture.classList.remove('hidden');
         const dataUrl = canvas.toDataURL('image/png');
 
         // Create a download link
@@ -536,4 +540,38 @@ function screenshot(e) {
 
 function togglehidden(id) {
     document.querySelector('#' + id).classList.toggle('hidden');
+}
+
+onload = (e) => {
+    console.log('run');
+    getRandomBorderRadius('#saved-photo-gradient');
+    getRandomBorderRadius('#container', 60);
+    getRandomBorderRadius('#profile-photo');
+    getRandomBorderRadius('#profile-photo img');
+    getRandomBorderRadius('#blocked-section');
+    getRandomBorderRadius('#blocked-row');
+    getRandomBorderRadius('#follower-row');
+    getRandomBorderRadius('#follower-note');
+    getRandomBorderRadius('#blocked-note');
+    getRandomBorderRadius('#footer', 50);
+    getRandomBorderRadius('#thank-you', 50);
+    document.querySelectorAll('#instruction li img').forEach((elem) => {
+        randomBorderRadius(elem, 70);
+    });
+    document.querySelectorAll('button').forEach((elem) => {
+        randomBorderRadius(elem, 70);
+    });
+};
+
+function getRandomBorderRadius(query, max = 100) {
+    elem = document.querySelector(query);
+    randomBorderRadius(elem, max);
+}
+
+function randomBorderRadius(elem, max = 100) {
+    elem.style.borderRadius = `${Math.random() * max}% ${
+        Math.random() * max
+    }% ${Math.random() * max}% ${Math.random() * max}% / ${
+        Math.random() * max
+    }% ${Math.random() * max}% ${Math.random() * max}% ${Math.random() * max}%`;
 }

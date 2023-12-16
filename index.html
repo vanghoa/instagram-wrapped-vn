@@ -44,7 +44,9 @@
                         <div id="profile-info">
                             <img class="hidden" />
                             <h1>
-                                Instagram Wrapped 2023
+                                instagram wrapped<span class="hidden" id="vn">
+                                    vi en</span
+                                >
                                 <span id="user-name">Tiếng Viet</span>
                             </h1>
                         </div>
@@ -87,18 +89,7 @@
                                 >
                             </div>
                         </div>
-                        <div
-                            class="row"
-                            style="
-                                justify-content: center;
-                                border-radius: 20px;
-                                background-color: white;
-                                color: blueviolet;
-                                background-image: url('bonghoate.png');
-                                background-repeat: repeat;
-                                background-size: contain;
-                            "
-                        >
+                        <div class="row" id="blocked-row">
                             <div
                                 style="
                                     text-align: center;
@@ -116,7 +107,7 @@
                                 <h1 id="blocked-note">
                                     trao giải bông hoa tệ nhất
                                 </h1>
-                                <div class="blocked-section">
+                                <div id="blocked-section">
                                     <p id="blocked-number"></p>
                                     <blurb
                                         >người đã bị bạn blocked
@@ -126,14 +117,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div
-                            class="row"
-                            style="
-                                justify-content: center;
-                                border-radius: 20px;
-                                background-color: white;
-                            "
-                        >
+                        <div class="row" id="follower-row">
                             <div
                                 style="
                                     text-align: center;
@@ -143,7 +127,7 @@
                                 "
                                 class="block"
                             >
-                                <h1 style="margin-top: 0">
+                                <h1 id="follower-note" style="margin-top: 0">
                                     Trong năm nay, 5 người này đã tìm thấy bạn
                                 </h1>
                                 <ul
@@ -156,27 +140,6 @@
 
                                 <button onclick="randomfollowers()">
                                     tìm 5 người khác
-                                </button>
-                            </div>
-                        </div>
-                        <div
-                            class="row"
-                            style="justify-content: center; border-radius: 20px"
-                        >
-                            <div
-                                style="
-                                    text-align: center;
-                                    width: 100%;
-                                    flex-grow: 0;
-                                    margin: 15px 0;
-                                "
-                                class="block"
-                            >
-                                <button
-                                    id="screenshot"
-                                    onclick="screenshot(this)"
-                                >
-                                    chụp ảnh màn hình
                                 </button>
                             </div>
                         </div>
@@ -260,9 +223,9 @@
                             <p>
                                 Click cái nút ở dưới và chọn folder vừa giải
                                 nén. <br /><br />
-                                Yên tâm! Toàn bộ dữ liệu của bạn đều được xử lý
-                                trong máy bạn - hoàn toàn không có data nào được
-                                tải lên hết, nên không lo bị hack hay j đâu!
+                                Yên tâm! Toàn bộ dữ liệu đều được xử lý trong
+                                máy bạn - hoàn toàn không có data nào được tải
+                                lên hết, nên không lo bị hack hay j đâu!
                             </p>
                             <img src="instruction/ins12.png" />
                         </li>
@@ -271,33 +234,31 @@
                         </button>
                         <div id="error"></div>
                     </ol>
-                    <div id="footer">
-                        by
-                        <a
-                            href="https://www.instagram.com/bao.anh.bui/"
-                            target="_blank"
-                            ><b>@bao.anh.bui</b></a
-                        >, forked & modified from
-                        <a
-                            href="https://www.instagram.com/anotherbrowsertab/"
-                            target="_blank"
-                            ><b>@anotherbrowsertab</b></a
-                        >'s 2022 #MESSENGERWRAPPED <br />
-                        thank you
-                        <b>
-                            @_v_tex_, @wohcb__, @ziemthene, @ducthao_,
-                            @chajahcha</b
-                        >
-                        for testing and bug detecting
-                    </div>
                 </div>
             </div>
-            <div id="capture"></div>
+            <div id="footer">
+                created by
+                <a href="https://www.instagram.com/bao.anh.bui/" target="_blank"
+                    ><b>@bao.anh.bui</b></a
+                >, forked & modified from
+                <a
+                    href="https://www.instagram.com/anotherbrowsertab/"
+                    target="_blank"
+                    ><b>@anotherbrowsertab</b></a
+                >'s 2022 #MESSENGERWRAPPED <br />
+                thank you
+                <b> @_v_tex_, @wohcb__, @ziemthene, @ducthao_, @chajahcha</b>
+                for testing and bug detecting
+            </div>
+            <div class="hidden" id="capture"></div>
             <button id="pause-button" onclick="pauseStartAnimation()">
                 <span id="pause-button-icon" class="material-symbols-outlined"
                     >pause</span
                 >
                 <span id="pause-button-text">Dừng animation</span>
+            </button>
+            <button id="screenshot" onclick="screenshot(this)">
+                chụp ảnh màn hình
             </button>
         </div>
         <script src="sketch.js"></script>

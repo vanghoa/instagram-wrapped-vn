@@ -17,6 +17,12 @@ let numLayersToDraw = 0;
 let countingUp = true;
 let holding = false;
 let paused = false;
+const purple = [138, 43, 226];
+const blue = [0, 183, 192];
+const green = [55, 175, 22];
+const pink = [255, 0, 179];
+const blue_ = [0, 27, 199];
+const yellow = [208, 149, 0];
 
 class ShapeBackground {
     constructor(width, height) {
@@ -128,18 +134,18 @@ class ShapeBackground {
     getCurrColor(c) {
         let nc;
         if (c === 'orange') {
-            nc = color(229, 129, 46);
+            nc = color(...green);
         } else if (c === 'pink') {
-            nc = color(226, 116, 186);
+            nc = color(...pink);
         } else if (c === 'green') {
-            nc = color(0, 54, 255);
+            nc = color(...blue_);
         } else if (c === 'yellow') {
-            nc = color(243, 0, 255);
+            nc = color(...blue);
         } else if (c === 'black') {
-            nc = color(19, 20, 18);
+            nc = color(...yellow);
         } else {
             // purple
-            nc = color(138, 43, 226);
+            nc = color(...purple);
         }
         return nc;
     }
@@ -150,14 +156,14 @@ function setup() {
     pCnv.parent(document.getElementById('profile-photo'));
     rectMode(CENTER);
     noStroke();
-    pContent = new ShapeBackground(PFP_SIZE.w / 3, PFP_SIZE.h / 3);
+    pContent = new ShapeBackground(PFP_SIZE.w / 2.5, PFP_SIZE.h / 2.5);
     frameRate(FRAME_RATE);
-    background(color(84, 32, 172));
+    background(color(...purple));
 }
 
 function draw() {
     if (!paused) {
-        background(color(84, 32, 172));
+        //background(color(...purple));
         for (let i = 0; i < currLayerNumber; i++) {
             pContent.buildBackground(i);
         }

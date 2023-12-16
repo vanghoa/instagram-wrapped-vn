@@ -9,7 +9,12 @@
 }
 
 :root {
-    --orange: rgb(229, 129, 46);
+    --orange: rgb(55, 175, 22);
+    --turquoise: rgb(0, 183, 192);
+    --pink: rgb(255, 0, 179);
+    --blue: rgb(0, 27, 199);
+    --yellow: rgb(208, 149, 0);
+    --lightpurple: rgb(223, 193, 254);
 }
 
 #background {
@@ -34,10 +39,12 @@ body {
     background: blueviolet;
     background-size: cover;
     background-repeat: no-repeat;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    display: block;
+    padding: 0.1px 0;
+}
+
+#body-gradient > div {
+    margin: 80px auto !important;
 }
 
 #saved-photo-gradient {
@@ -46,11 +53,12 @@ body {
     margin: 80px 0;
     max-width: 90vw;
     width: min-content;
+    border: 5px white solid;
 }
 
 #container {
     border-radius: 20px;
-    background-color: rgb(238, 170, 213);
+    background-color: var(--lightpurple);
     color: rgb(19, 20, 18);
     margin: 40px;
     display: flex;
@@ -59,6 +67,7 @@ body {
     align-items: center;
     gap: 20px;
     padding: 20px;
+    border: 5px solid white;
 }
 
 h1 {
@@ -76,7 +85,7 @@ em {
     text-decoration: underline;
     font-size: inherit;
     font-style: normal;
-    color: blue;
+    color: var(--blue);
 }
 
 #main ol,
@@ -139,13 +148,15 @@ li {
 }
 
 #footer {
-    background-color: rgb(238, 170, 213);
     color: rgb(19, 20, 18);
+    background-color: var(--lightpurple);
     font-size: 14px;
     bottom: 0;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
     max-width: 30em;
+    padding: 1em;
+    border: 5px solid white;
 }
 
 #footer a:link,
@@ -153,12 +164,12 @@ a:visited {
     color: rgb(19, 20, 18);
 }
 
+#screenshot,
 #pause-button {
-    top: 10px;
-    right: 10px;
-    font-size: 36px;
-    border-radius: 0;
-    padding: 0.2em;
+    top: 20px;
+    left: 20px;
+    font-size: 14px;
+    padding: 0.7em 0.8em;
     z-index: 3;
     position: fixed;
     color: rgb(255, 255, 255);
@@ -169,6 +180,12 @@ a:visited {
     align-items: center;
     border-radius: 20px;
     border: 5px white solid;
+    max-width: 20em;
+}
+
+#pause-button {
+    right: 20px;
+    left: unset;
 }
 
 #pause-button:hover {
@@ -176,7 +193,7 @@ a:visited {
 }
 
 #pause-button-icon {
-    font-size: 36px;
+    font-size: inherit;
     margin-right: 8px;
 }
 
@@ -219,33 +236,34 @@ a:visited {
 }
 
 .randompos:nth-child(2n) {
-    color: red;
+    color: var(--blue);
 }
 
 .randompos:nth-child(3n) {
-    color: green;
+    color: var(--orange);
 }
 
 .randompos:nth-child(4n) {
-    color: chocolate;
+    color: var(--pink);
 }
 
 .randompos:nth-child(5n) {
-    color: blue;
+    color: var(--yellow);
 }
 
 .randompos_ul {
     position: relative;
 }
 
-.blocked-section {
+#blocked-section {
     background-color: blueviolet;
     color: white;
     padding: 1em;
     border-radius: 20px;
 }
 
-#blocked-note {
+#blocked-note,
+#follower-note {
     margin: 0;
     color: blueviolet;
     background-color: white;
@@ -254,9 +272,26 @@ a:visited {
     max-width: 90%;
 }
 
+#follower-note {
+    width: unset;
+}
+
+#blocked-row {
+    justify-content: center;
+    border-radius: 20px;
+    background-color: white;
+    color: blueviolet;
+    background-image: url('bonghoate.png');
+    background-repeat: repeat;
+    background-size: contain;
+    border: 5px solid white;
+}
+
 #thank-you {
     width: fit-content;
     max-width: 90%;
+    background-color: white;
+    padding: 1em;
 }
 
 .section {
@@ -266,7 +301,7 @@ a:visited {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 #instruction li {
@@ -321,7 +356,7 @@ a:visited {
 }
 
 button {
-    border-radius: 40px;
+    border-radius: 20px;
     border: 0px;
     font-weight: bold;
     padding: 0.5em 1em;
@@ -390,6 +425,7 @@ button {
     z-index: 2;
     overflow: hidden;
     border-radius: 20px;
+    border: 5px solid white;
 }
 
 #profile-photo canvas {
@@ -398,6 +434,7 @@ button {
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: -1;
+    filter: blur(3px);
 }
 
 #mobile {
@@ -421,10 +458,10 @@ button {
 }
 
 #capture canvas {
-    border: 5px white solid;
     max-width: 100%;
     border-radius: 20px;
     display: block;
+    border: white 5px dashed;
 }
 
 #capture {
@@ -433,14 +470,28 @@ button {
     align-items: center;
     gap: 20px;
     flex-direction: column;
+    margin: 80px 0;
 }
 
-#screenshot {
-    max-width: 20em;
+#capture::before {
+    content: 'Lưu ảnh ở đây';
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
 }
 
 [onclick='randomfollowers()'] {
     margin-top: 1em;
+}
+
+#follower-row {
+    justify-content: center;
+    border-radius: 20px;
+    background-color: white;
+}
+
+#vn {
+    font-size: inherit;
 }
 
 @media screen and (max-width: 600px) {
