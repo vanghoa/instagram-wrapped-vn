@@ -90,6 +90,22 @@ async function readDirectory() {
             return false;
         }
     }
+    async function FolderCheck(path, log = true) {
+        try {
+            return await getFolder(path);
+        } catch (error) {
+            log &&
+                (document.querySelector(
+                    '#error'
+                ).innerHTML += `- :/ cái folder ${path} này không tồn tại hoặc file.zip lúc tải/giải nén đã bị hư hỏng - xin bạn hãy nhắn tin cho @bao.anh.bui <br>- Chi tiết lỗi: ${error}<br><br>`);
+            log &&
+                document
+                    .querySelector('#instruction')
+                    .classList.remove('hidden');
+            log && document.querySelector('#main').classList.add('hidden');
+            return false;
+        }
+    }
     let story_likes_data = {};
     let messages_data = {};
     let liked_posts_data = {};
@@ -130,7 +146,11 @@ async function readDirectory() {
         return;
     }
 
-    if (await checkHTML('personal_information/personal_information.html')) {
+    if (
+        await checkHTML(
+            'personal_information/personal_information/personal_information.html'
+        )
+    ) {
         document.querySelector(
             '#error'
         ).innerHTML += `- :/ Bạn ơi bạn check lại bước 6 - phải chọn format là JSON chứ không phải là HTML nhá <br>- Chi tiết lỗi: ${error}<br><br>`;
@@ -138,6 +158,9 @@ async function readDirectory() {
         document.querySelector('#main').classList.add('hidden');
         return;
     }
+
+    // fuck instagram - this is the old directory before 21 Dec 2023
+    /*
 
     const personal_information = await JSONCheck(
         'personal_information/personal_information.json'
@@ -154,8 +177,42 @@ async function readDirectory() {
         'story_sticker_interactions/story_likes.json',
         false
     );
+    const follow_directory = await FolderCheck(
+        'followers_and_following'
+    );
+    const messenger_directory = await FolderCheck(
+        'messages/inbox'
+    );
     const profile_photo_uri = (
         await JSONCheck('content/profile_photos.json', false)
+    */
+
+    const personal_information = await JSONCheck(
+        'personal_information/personal_information/personal_information.json'
+    );
+    const blocked_check = await JSONCheck(
+        'connections/followers_and_following/blocked_accounts.json',
+        false
+    );
+    const restricted_check = await JSONCheck(
+        'connections/followers_and_following/restricted_accounts.json',
+        false
+    );
+    const story_likes_check = await JSONCheck(
+        'your_instagram_activity/story_sticker_interactions/story_likes.json',
+        false
+    );
+    const follow_directory = await FolderCheck(
+        'connections/followers_and_following'
+    );
+    const messenger_directory = await FolderCheck(
+        'your_instagram_activity/messages/inbox'
+    );
+    const profile_photo_uri = (
+        await JSONCheck(
+            'your_instagram_activity/content/profile_photos.json',
+            false
+        )
     )?.ig_profile_picture?.[0]?.uri;
     console.log(profile_photo_uri);
     if (profile_photo_uri) {
@@ -167,7 +224,11 @@ async function readDirectory() {
         }
     }
 
-    if (personal_information == false) {
+    if (
+        personal_information == false ||
+        follow_directory == false ||
+        messenger_directory == false
+    ) {
         return;
     }
 
@@ -185,7 +246,6 @@ async function readDirectory() {
                     : 'Username'
             ].value;
         // get followers
-        const follow_directory = await getFolder('followers_and_following');
         for await (const [key, value] of follow_directory) {
             if (key.startsWith('followers') && key.endsWith('.json')) {
                 const data = JSON.parse(
@@ -235,7 +295,6 @@ async function readDirectory() {
         const total_story_likes = story_likes.length;
 
         // get messages
-        const messenger_directory = await getFolder('messages/inbox');
         for await (const [key, value] of messenger_directory) {
             if (value.kind == 'file') continue;
             for await (const [key_, value_] of value) {
