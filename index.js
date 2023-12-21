@@ -197,7 +197,9 @@ async function readDirectory() {
     followers_list = [];
     let imageURL = false;
 
-    if ((await recursiveFindFile('personal_information.html')).result) {
+    if (
+        (await recursiveFindFile(dirHandle, 'personal_information.html')).result
+    ) {
         logmessage(
             `- :/ Bạn ơi bạn check lại bước 6 - phải chọn format là JSON chứ không phải là HTML nhá<br><br>`
         );
