@@ -17,17 +17,6 @@ const atsymbol = getRandomItems('⚘✽✾✿❀❁❃❊❋✤✣⚜⚘ꕤꕥ�
 const at = `<span id="flower">${atsymbol}</span>`;
 
 async function readDirectory() {
-    async function getFolder(path) {
-        path = path.split('/');
-        let result = dirHandle;
-        for (let i = 0; i < path.length; i++) {
-            result = await conditionalFileHandle(path[i]);
-        }
-        return result;
-        function conditionalFileHandle(name) {
-            return result.getDirectoryHandle(name);
-        }
-    }
     async function getFile(path) {
         path = path.split('/');
         let result = dirHandle;
@@ -35,19 +24,6 @@ async function readDirectory() {
             result = await conditionalFileHandle(path[i], i < path.length - 1);
         }
         return await result.getFile();
-        function conditionalFileHandle(name, isDir) {
-            return isDir
-                ? result.getDirectoryHandle(name)
-                : result.getFileHandle(name);
-        }
-    }
-    async function getJSON(path) {
-        path = path.split('/');
-        let result = dirHandle;
-        for (let i = 0; i < path.length; i++) {
-            result = await conditionalFileHandle(path[i], i < path.length - 1);
-        }
-        return JSON.parse(await readFileContents(await result.getFile()));
         function conditionalFileHandle(name, isDir) {
             return isDir
                 ? result.getDirectoryHandle(name)
@@ -75,6 +51,22 @@ async function readDirectory() {
         }
     }
     async function JSONCheck(path, log = true) {
+        async function getJSON(path) {
+            path = path.split('/');
+            let result = dirHandle;
+            for (let i = 0; i < path.length; i++) {
+                result = await conditionalFileHandle(
+                    path[i],
+                    i < path.length - 1
+                );
+            }
+            return JSON.parse(await readFileContents(await result.getFile()));
+            function conditionalFileHandle(name, isDir) {
+                return isDir
+                    ? result.getDirectoryHandle(name)
+                    : result.getFileHandle(name);
+            }
+        }
         try {
             return await getJSON(path);
         } catch (error) {
@@ -91,6 +83,17 @@ async function readDirectory() {
         }
     }
     async function FolderCheck(path, log = true) {
+        async function getFolder(path) {
+            path = path.split('/');
+            let result = dirHandle;
+            for (let i = 0; i < path.length; i++) {
+                result = await conditionalFileHandle(path[i]);
+            }
+            return result;
+            function conditionalFileHandle(name) {
+                return result.getDirectoryHandle(name);
+            }
+        }
         try {
             return await getFolder(path);
         } catch (error) {
@@ -106,62 +109,103 @@ async function readDirectory() {
             return false;
         }
     }
+    async function recursiveFolderCheck(dir, foldername) {
+        try {
+            let path = foldername.split('/');
+            if (path.length > 1) {
+                let dir_ = dir;
+                for (let i = 0; i < path.length; i++) {
+                    dir_ = (await recursiveFolderCheck(dir_, path[i])).result;
+                }
+                return { result: dir_, error: 'no error' };
+            }
+            const entries = await dir.entries();
+            const entriesArray = [];
+            for await (const [key, value] of entries) {
+                entriesArray.push([key, value]);
+                //console.log(key);
+                if (key == foldername)
+                    return { result: value, error: 'no error' };
+            }
+            for (const [key, value] of entriesArray) {
+                if (value.kind == 'file' || key.includes('facebook')) continue;
+                dir = await recursiveFolderCheck(value, foldername);
+                if (dir.result) return dir;
+            }
+            return { result: false, error: 'không tìm thấy folder' };
+        } catch (error) {
+            return { result: false, error: error };
+        }
+    }
+    async function recursiveFindFile(dir, filename) {
+        try {
+            const path = filename.split('/');
+            if (path.length > 1) {
+                let dir_ = dir;
+                for (let i = 0; i < path.length; i++) {
+                    dir_ = (await recursiveFindFile(dir_, path[i])).result;
+                    console.log(dir_);
+                }
+                return { result: dir_, error: 'no error' };
+            }
+            const entries = await dir.entries();
+            const entriesArray = [];
+            for await (const [key, value] of entries) {
+                entriesArray.push([key, value]);
+                if (key == filename)
+                    return { result: value, error: 'no error' };
+            }
+            for (const [key, value] of entriesArray) {
+                if (value.kind == 'file') continue;
+                dir = await recursiveFindFile(value, filename);
+                if (dir.result) return dir;
+            }
+            return { result: false, error: 'không tìm thấy file' };
+        } catch (error) {
+            return { result: false, error: error };
+        }
+    }
+    async function recursiveFindJSONCheck(dir, filename) {
+        try {
+            const file = await recursiveFindFile(dir, filename);
+            if (file.result) {
+                return {
+                    result: JSON.parse(
+                        await readFileContents(await file.result.getFile())
+                    ),
+                    error: 'no error',
+                };
+            }
+            return { result: false, error: 'không tìm thấy file' };
+        } catch (error) {
+            return { result: false, error: error };
+        }
+    }
+    function logmessage(msg) {
+        document.querySelector('#error').innerHTML += msg;
+        document.querySelector('#instruction').classList.remove('hidden');
+        document.querySelector('#main').classList.add('hidden');
+    }
     let story_likes_data = {};
     let messages_data = {};
     let liked_posts_data = {};
     let total_messages = 0;
     let total_reacts_and_stickers = 0;
     let LIMIT = 10;
-    let dirHandle;
+    let dirHandle = await window.showDirectoryPicker();
     let followers_object = {};
     followers_list = [];
     let imageURL = false;
 
-    try {
-        dirHandle = await recursiveCheck(await window.showDirectoryPicker());
-        async function recursiveCheck(dir) {
-            const entries = await dir.entries();
-            const entriesArray = [];
-            for await (const [key, value] of entries) {
-                entriesArray.push([key, value]);
-                if (key == 'personal_information') return dir;
-            }
-            for (const [key, value] of entriesArray) {
-                if (value.kind == 'file') continue;
-                dir = await recursiveCheck(value);
-                if (dir) return dir;
-            }
-            return false;
-        }
-        if (dirHandle == false) throw new Error('Folder này không đúng');
-    } catch (error) {
-        if (error instanceof DOMException && error.name === 'AbortError') {
-            return;
-        }
-        document.querySelector(
-            '#error'
-        ).innerHTML += `- :/ Bạn có chắc bạn chọn đúng folder không? Đảm bảo rằng folder bạn chọn là folder chứa mấy cái folder con bên trong ví dự như 'personal_information', 'messages', 'followers_and_following',... Bạn có thể thử tải lại/giải nén lại file zip <br>- Chi tiết lỗi: ${error}<br><br>`;
-        document.querySelector('#instruction').classList.remove('hidden');
-        document.querySelector('#main').classList.add('hidden');
-        return;
-    }
-
-    if (
-        await checkHTML(
-            'personal_information/personal_information/personal_information.html'
-        )
-    ) {
-        document.querySelector(
-            '#error'
-        ).innerHTML += `- :/ Bạn ơi bạn check lại bước 6 - phải chọn format là JSON chứ không phải là HTML nhá <br>- Chi tiết lỗi: ${error}<br><br>`;
-        document.querySelector('#instruction').classList.remove('hidden');
-        document.querySelector('#main').classList.add('hidden');
+    if ((await recursiveFindFile('personal_information.html')).result) {
+        logmessage(
+            `- :/ Bạn ơi bạn check lại bước 6 - phải chọn format là JSON chứ không phải là HTML nhá<br><br>`
+        );
         return;
     }
 
     // fuck instagram - this is the old directory before 21 Dec 2023
     /*
-
     const personal_information = await JSONCheck(
         'personal_information/personal_information.json'
     );
@@ -187,49 +231,64 @@ async function readDirectory() {
         await JSONCheck('content/profile_photos.json', false)
     */
 
-    const personal_information = await JSONCheck(
-        'personal_information/personal_information/personal_information.json'
+    let personal_information = await recursiveFindJSONCheck(
+        dirHandle,
+        'personal_information.json'
     );
-    const blocked_check = await JSONCheck(
-        'connections/followers_and_following/blocked_accounts.json',
-        false
+    if (!personal_information.result) {
+        logmessage(
+            msgFile('personal_information.json', personal_information.error)
+        );
+        return;
+    }
+    personal_information = personal_information.result;
+    //
+    const blocked_check = (
+        await recursiveFindJSONCheck(dirHandle, 'blocked_accounts.json')
+    ).result;
+    const restricted_check = (
+        await recursiveFindJSONCheck(dirHandle, 'restricted_accounts.json')
+    ).result;
+    const story_likes_check = (
+        await recursiveFindJSONCheck(dirHandle, 'story_likes.json')
+    ).result;
+    //
+    let follow_directory = await recursiveFolderCheck(
+        dirHandle,
+        'followers_and_following'
     );
-    const restricted_check = await JSONCheck(
-        'connections/followers_and_following/restricted_accounts.json',
-        false
+    if (!follow_directory.result) {
+        logmessage(
+            msgFolder('followers_and_following', follow_directory.error)
+        );
+        return;
+    }
+    follow_directory = follow_directory.result;
+    //
+    let messenger_directory = await recursiveFolderCheck(
+        dirHandle,
+        'messages/inbox'
     );
-    const story_likes_check = await JSONCheck(
-        'your_instagram_activity/story_sticker_interactions/story_likes.json',
-        false
-    );
-    const follow_directory = await FolderCheck(
-        'connections/followers_and_following'
-    );
-    const messenger_directory = await FolderCheck(
-        'your_instagram_activity/messages/inbox'
-    );
+    if (!messenger_directory.result) {
+        logmessage(msgFolder('messages/inbox', messenger_directory.error));
+        return;
+    }
+    messenger_directory = messenger_directory.result;
+    //
     const profile_photo_uri = (
-        await JSONCheck(
-            'your_instagram_activity/content/profile_photos.json',
-            false
-        )
-    )?.ig_profile_picture?.[0]?.uri;
-    console.log(profile_photo_uri);
+        await recursiveFindJSONCheck(dirHandle, 'profile_photos.json')
+    ).result?.ig_profile_picture?.[0]?.uri;
     if (profile_photo_uri) {
         try {
-            imageURL = URL.createObjectURL(await getFile(profile_photo_uri));
+            imageURL = URL.createObjectURL(
+                await (
+                    await recursiveFindFile(dirHandle, profile_photo_uri)
+                ).result.getFile()
+            );
         } catch (e) {
             imageURL = false;
             console.log(e);
         }
-    }
-
-    if (
-        personal_information == false ||
-        follow_directory == false ||
-        messenger_directory == false
-    ) {
-        return;
     }
 
     try {
@@ -302,8 +361,6 @@ async function readDirectory() {
                     const data = JSON.parse(
                         await readFileContents(await value_.getFile())
                     );
-
-                    //console.log(key_, key);
                     const default_name = getUTF8String(
                         data.participants[0].name
                     );
@@ -396,11 +453,9 @@ async function readDirectory() {
         dataPopulation(output_data);
     } catch (error) {
         console.error('Error:', error);
-        document.querySelector(
-            '#error'
-        ).innerHTML += `- Á đù! lỗi này ảo thật - xin bạn hãy report lại cho @bao.anh.bui trên instagram để sửa lỗi <br> - Chi tiết lỗi: ${error}<br><br>`;
-        document.querySelector('#instruction').classList.remove('hidden');
-        document.querySelector('#main').classList.add('hidden');
+        logmessage(
+            `- Á đù! lỗi này ảo thật - xin bạn hãy report lại cho @bao.anh.bui trên instagram để sửa lỗi <br> - Chi tiết lỗi: ${error}<br><br>`
+        );
     }
 }
 
@@ -638,4 +693,12 @@ function randomBorderRadius(elem, max = 100) {
     }% ${Math.random() * max}% ${Math.random() * max}% / ${
         Math.random() * max
     }% ${Math.random() * max}% ${Math.random() * max}% ${Math.random() * max}%`;
+}
+
+function msgFile(name, error) {
+    return `- :/ cái file ${name} này không tồn tại - :/ Bạn có chắc bạn chọn đúng folder không? Đảm bảo rằng folder bạn chọn là folder chứa mấy cái folder con bên trong ví dự như 'personal_information', 'messages', 'followers_and_following',... Bạn có thể thử tải lại/giải nén lại file zip <br>- Chi tiết lỗi: ${error}<br><br>`;
+}
+
+function msgFolder(name, error) {
+    return `- :/ cái folder ${name} này không tồn tại - :/ Bạn có chắc bạn chọn đúng folder không? Đảm bảo rằng folder bạn chọn là folder chứa mấy cái folder con bên trong ví dự như 'personal_information', 'messages', 'followers_and_following',... Bạn có thể thử tải lại/giải nén lại file zip <br>- Chi tiết lỗi: ${error}<br><br>`;
 }
