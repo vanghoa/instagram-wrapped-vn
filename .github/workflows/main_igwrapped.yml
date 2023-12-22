@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - IntagramWrapped
+name: Build and deploy Node.js app to Azure Web App - IGWrapped
 
 on:
     push:
@@ -61,7 +61,7 @@ jobs:
               id: deploy-to-webapp
               uses: azure/webapps-deploy@v2
               with:
-                  app-name: 'IntagramWrapped'
+                  app-name: 'IGWrapped'
                   slot-name: 'Production'
                   package: .
-                  publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_486B2748F1DA4BB6ACA74CF3DCC9C7E8 }}
+                  publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A348ACC3865D4FA2A18D423E88D4A54F }}
