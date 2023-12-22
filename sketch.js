@@ -1,3 +1,7 @@
+if (top != self) {
+    document.body.innerHTML = '';
+}
+
 const SHAPES = ['circle', 'square', 'triangle'];
 const COLORS = ['orange', 'pink', 'green', 'yellow', 'black', 'purple'];
 const NUM_SHAPE_LAYERS = getRandom(5, 8);
