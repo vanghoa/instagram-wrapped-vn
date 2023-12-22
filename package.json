@@ -1,0 +1,11 @@
+{
+    "name": "2022-messenger-wrapped",
+    "version": "1.0.0",
+    "description": "by [@bao.anh.bui](https://www.instagram.com/bao.anh.bui/)",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "bao anh bui",
+    "license": "ISC"
+}
