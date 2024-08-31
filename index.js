@@ -37,7 +37,7 @@ async function readDirectory() {
                 }
             }
             for (const [key, value] of entriesArray) {
-                if (value.kind == 'file' || key.includes('facebook')) continue;
+                if (value.kind == 'file' || excludeFolder(key)) continue;
                 dir = await recursiveFind(value, filename, endwith);
                 if (dir.result) return dir;
             }
@@ -188,6 +188,7 @@ async function readDirectory() {
     //////////////////////////////////////////////////////////////////
     try {
         // get name
+        console.log(personal_information);
         const isVn =
             personal_information.profile_user[0].string_map_data.hasOwnProperty(
                 'T\u00c3\u00aan ng\u00c6\u00b0\u00e1\u00bb\u009di d\u00c3\u00b9ng'
@@ -594,4 +595,8 @@ function msgFile(name, error) {
 
 function msgFolder(name, error) {
     return `- :/ cái folder ${name} này không tồn tại - :/ Bạn có chắc bạn chọn đúng folder không? Đảm bảo rằng folder bạn chọn là folder chứa mấy cái folder con bên trong ví dự như 'personal_information', 'messages', 'followers_and_following',... Bạn có thể thử tải lại/giải nén lại file zip <br>- Chi tiết lỗi: ${error}<br><br>`;
+}
+
+function excludeFolder(key) {
+    return ['facebook', 'threads'].some((txt) => key.includes(txt));
 }
