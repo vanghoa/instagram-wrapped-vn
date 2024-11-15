@@ -549,7 +549,7 @@ function randomfollowers() {
 
 function screenshot(e) {
     html2canvas(document.querySelector('#saved-photo-gradient'), {
-        backgroundColor: 'blueviolet',
+        backgroundColor: style.getPropertyValue('--backgroundcolor'),
         onclone: (doc) => {
             let dom = [
                 ...doc.querySelectorAll('.details greenspan'),

@@ -16,7 +16,7 @@
     --blue: rgb(0, 27, 199);
     --yellow: rgb(167, 136, 0);
     --lightpurple: rgb(188, 235, 255);
-    --blueviolet: rgb(0, 128, 255);
+    --backgroundcolor: rgb(0, 128, 255);
     --fontsz: 15px;
 }
 
@@ -40,7 +40,7 @@ body {
 
 #body-gradient {
     min-height: 100vh;
-    background: var(--blueviolet);
+    background: var(--backgroundcolor);
     background-size: cover;
     background-repeat: no-repeat;
     display: block;
@@ -240,7 +240,7 @@ a:visited {
 }
 
 .randompos:nth-child(n) {
-    color: var(--blueviolet);
+    color: var(--backgroundcolor);
 }
 
 .randompos:nth-child(2n) {
@@ -264,7 +264,7 @@ a:visited {
 }
 
 #blocked-section {
-    background-color: var(--blueviolet);
+    background-color: var(--backgroundcolor);
     color: white;
     padding: 1em;
     border-radius: 20px;
@@ -273,7 +273,7 @@ a:visited {
 #blocked-note,
 #follower-note {
     margin: 0;
-    color: var(--blueviolet);
+    color: var(--backgroundcolor);
     background-color: white;
     padding: 0.5em;
     width: fit-content;
@@ -288,7 +288,7 @@ a:visited {
     justify-content: center;
     border-radius: 20px;
     background-color: white;
-    color: var(--blueviolet);
+    color: var(--backgroundcolor);
     background-image: url('bonghoate.png');
     background-repeat: repeat;
     background-size: contain;
@@ -318,7 +318,7 @@ a:visited {
 
 #instruction li:before {
     content: '';
-    background-color: var(--blueviolet);
+    background-color: var(--backgroundcolor);
     display: block;
     width: 100%;
     height: 5px;
@@ -334,7 +334,7 @@ a:visited {
 #instruction li img {
     width: 500px;
     border-radius: 40px;
-    border: 5px var(--blueviolet) solid;
+    border: 5px var(--backgroundcolor) solid;
     margin: 0 auto;
     display: block;
 }
@@ -368,8 +368,8 @@ button {
     border: 0px;
     font-weight: bold;
     padding: 0.5em 1em;
-    border: 5px var(--blueviolet) solid;
-    color: var(--blueviolet);
+    border: 5px var(--backgroundcolor) solid;
+    color: var(--backgroundcolor);
     cursor: pointer;
 }
 
@@ -377,7 +377,7 @@ button {
     font-size: 1.2em;
     width: fit-content;
     margin: 60px auto;
-    box-shadow: 0 0 40px 10px var(--blueviolet);
+    box-shadow: 0 0 40px 10px var(--backgroundcolor);
 }
 
 #error {
@@ -454,7 +454,7 @@ button {
     position: fixed;
     left: 0;
     top: 0;
-    background-color: var(--blueviolet);
+    background-color: var(--backgroundcolor);
     z-index: 100;
     font-weight: 800;
     font-size: 20px;

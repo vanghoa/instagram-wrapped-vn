@@ -2,13 +2,13 @@ if (top != self) {
     document.body.innerHTML = '';
 }
 
-let style = getComputedStyle(document.body);
+const style = getComputedStyle(document.body);
 
 const SHAPES = ['circle', 'square', 'triangle'];
 const COLORS = [
     style.getPropertyValue('--orange'),
     style.getPropertyValue('--lightpurple'),
-    style.getPropertyValue('--blueviolet'),
+    style.getPropertyValue('--backgroundcolor'),
     style.getPropertyValue('--turquoise'),
     style.getPropertyValue('--pink'),
     style.getPropertyValue('--yellow'),
