@@ -16,6 +16,7 @@ let blocked_note = [
 const atsymbol = getRandomItems('⚘✽✾✿❀❁❃❊❋✤✣⚜⚘ꕤꕥ☘'.split(''), 1);
 const at = `<span id="flower">${atsymbol}</span>`;
 const msg = `:/ Bạn có chắc bạn chọn đúng folder không? Đảm bảo rằng folder bạn chọn là folder chứa mấy cái folder con bên trong ví dự như 'personal_information', 'messages', 'followers_and_following',... Bạn có thể thử tải lại/giải nén lại file zip <br>-`;
+const LIMIT = 10;
 
 async function readDirectory() {
     async function recursiveFind(dir, filename, endwith = null) {
@@ -90,9 +91,9 @@ async function readDirectory() {
     let story_likes_data = {};
     let messages_data = {};
     let liked_posts_data = {};
+    let liked_threads_data = {};
     let total_messages = 0;
     let total_reacts_and_stickers = 0;
-    let LIMIT = 10;
     let dirHandle = await window.showDirectoryPicker();
     let followers_object = {};
     followers_list = [];
@@ -156,6 +157,10 @@ async function readDirectory() {
     const liked_posts_check = await recursiveFindJSONCheck(
         dirHandle,
         'liked_posts.json'
+    );
+    const liked_threads_check = await recursiveFindJSONCheck(
+        dirHandle,
+        'threads/liked_threads.json'
     );
     //
     let follow_directory = await recursiveFindLog(
@@ -235,14 +240,13 @@ async function readDirectory() {
             setDefault(liked_posts_data, title, 0);
             liked_posts_data[title]++;
         }
-        /*
-        const liked_posts = (await getJSON('likes/liked_posts.json'))
-            .likes_media_likes;
-        delete liked_posts_data[your_user_name];
-        liked_posts_data = Object.entries(liked_posts_data)
-            .sort((a, b) => b[1] - a[1]) // Sort in descending order based on the values
-            .slice(0, LIMIT);
-        */
+        //get liked threads
+        const liked_threads =
+            liked_threads_check?.text_post_app_media_likes ?? [];
+        for (const { title } of liked_threads) {
+            setDefault(liked_threads_data, title, 0);
+            liked_threads_data[title]++;
+        }
         // get story_likes
         const story_likes =
             story_likes_check?.story_activities_story_likes ?? [];
@@ -330,14 +334,13 @@ async function readDirectory() {
             .slice(0, LIMIT);
 
         // sorting story_likes_data
-        story_likes_data = Object.entries(story_likes_data)
-            .sort((a, b) => b[1] - a[1]) // Sort in descending order based on the values
-            .slice(0, LIMIT);
+        story_likes_data = sortLikedData(story_likes_data);
 
         // sorting liked_posts_data
-        liked_posts_data = Object.entries(liked_posts_data)
-            .sort((a, b) => b[1] - a[1]) // Sort in descending order based on the values
-            .slice(0, LIMIT);
+        liked_posts_data = sortLikedData(liked_posts_data);
+
+        // sorting liked_posts_data
+        liked_threads_data = sortLikedData(liked_threads_data);
 
         const output_data = {
             user_name: your_user_name,
@@ -348,6 +351,7 @@ async function readDirectory() {
             total_story_likes: total_story_likes,
             total_story_likes_ppl: total_story_likes_ppl,
             top_post_likes: liked_posts_data,
+            top_thread_likes: liked_threads_data,
             blocked_number: blocked_number,
             followers_list: followers_list,
             restricted_number: restricted_number,
@@ -362,6 +366,12 @@ async function readDirectory() {
             `- Á đù! lỗi này ảo thật - xin bạn hãy report lại cho @bao.anh.bui trên instagram để sửa lỗi <br> - Chi tiết lỗi: ${error}<br><br>`
         );
     }
+}
+
+function sortLikedData(data) {
+    return Object.entries(data)
+        .sort((a, b) => b[1] - a[1]) // Sort in descending order based on the values
+        .slice(0, LIMIT);
 }
 
 async function readFileContents(file) {
@@ -415,6 +425,7 @@ function dataPopulation(yourData) {
     const topPeople = document.getElementById('top-people');
     const topStoryLikes = document.getElementById('top-story-likes');
     const topPostLikes = document.getElementById('top-post-likes');
+    const topThreadLikes = document.getElementById('top-thread-likes');
     const totalMessages = document.getElementById('total-messages');
     const totalStoryLikes = document.getElementById(
         'total-reacts-and-stickers'
@@ -451,7 +462,7 @@ function dataPopulation(yourData) {
                     }
                     + ${yourData.top_inbox[
                         i
-                    ].messages.toLocaleString()} tin nhắn
+                    ].messages.toLocaleString()} tin nhắn từ bạn
                 </p>
                 </div>`;
         }
@@ -461,20 +472,44 @@ function dataPopulation(yourData) {
 
     // populate top story likes
     for (let i = 0; i < yourData.top_story_likes.length; i++) {
+        const name = yourData.top_story_likes[i][0];
+        const num = yourData.top_story_likes[i][1];
         let el = document.createElement('li');
-        el.innerHTML = `${lightEl(i + 1)} ${at}${
-            yourData.top_story_likes[i][0]
-        } <greenspan>(${yourData.top_story_likes[i][1]} lần)</greenspan>`;
+        el.innerHTML = `${lightEl(
+            i + 1
+        )} ${at}${name} <greenspan>(${num} tim)</greenspan>`;
+        num <= 2 && el.classList.add('unimportant');
         topStoryLikes.appendChild(el);
     }
 
     // populate top post likes
     for (let i = 0; i < yourData.top_post_likes.length; i++) {
+        const name = yourData.top_post_likes[i][0];
+        const num = yourData.top_post_likes[i][1];
         let el = document.createElement('li');
-        el.innerHTML = `${lightEl(i + 1)} ${at}${
-            yourData.top_post_likes[i][0]
-        } <greenspan>(${yourData.top_post_likes[i][1]} posts)</greenspan>`;
+        el.innerHTML = `${lightEl(
+            i + 1
+        )} ${at}${name} <greenspan>(${num} bài)</greenspan>`;
+        num <= 2 && el.classList.add('unimportant');
         topPostLikes.appendChild(el);
+    }
+
+    // populate top thread likes
+    if (yourData.top_thread_likes.length == 0) {
+        topThreadLikes.previousElementSibling.remove();
+        let el = document.createElement('li');
+        el.innerHTML = `Hãy sử dụng Threads để xem thêm 👀`;
+        topThreadLikes.appendChild(el);
+    }
+    for (let i = 0; i < yourData.top_thread_likes.length; i++) {
+        const name = yourData.top_thread_likes[i][0];
+        const num = yourData.top_thread_likes[i][1];
+        let el = document.createElement('li');
+        el.innerHTML = `${lightEl(
+            i + 1
+        )} ${at}${name} <greenspan>(${num} thrét)</greenspan>`;
+        num <= 2 && el.classList.add('unimportant');
+        topThreadLikes.appendChild(el);
     }
 
     // populate followers list

@@ -30,7 +30,8 @@
 greenspan,
 light {
     display: inline;
-    font-weight: 200;
+    font-weight: 300;
+    font-size: 0.8em;
 }
 
 body {
@@ -75,9 +76,9 @@ body {
 }
 
 h1 {
-    color: rgb(19, 20, 18);
+    color: var(--backgroundcolor);
     font-size: var(--fontsz);
-    font-weight: 500;
+    font-weight: 600;
     margin: 0.6rem 0;
 }
 
@@ -147,13 +148,36 @@ li {
     flex-shrink: 1;
     flex-grow: 1;
 }
+#threadblock {
+    background-color: black;
+    padding: 1.1rem;
+    border-radius: 1rem;
+    position: relative;
+    top: -0.5rem;
+    transform: rotate(3deg);
+}
+#threadblock * {
+    margin-top: 0;
+    color: white;
+}
+#threadblock li {
+    font-weight: 600;
+}
+#threadblock greenspan,
+#threadblock light {
+    font-weight: 100;
+}
+.unimportant {
+    opacity: 0.6;
+}
 
 .block p {
     font-weight: 800;
 }
 
 .details p {
-    font-weight: 400;
+    font-weight: 300;
+    font-size: 0.8em;
 }
 
 #footer {
