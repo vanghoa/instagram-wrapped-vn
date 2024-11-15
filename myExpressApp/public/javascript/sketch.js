@@ -2,8 +2,19 @@ if (top != self) {
     document.body.innerHTML = '';
 }
 
+let style = getComputedStyle(document.body);
+
 const SHAPES = ['circle', 'square', 'triangle'];
-const COLORS = ['orange', 'pink', 'green', 'yellow', 'black', 'purple'];
+const COLORS = [
+    style.getPropertyValue('--orange'),
+    style.getPropertyValue('--lightpurple'),
+    style.getPropertyValue('--blueviolet'),
+    style.getPropertyValue('--turquoise'),
+    style.getPropertyValue('--pink'),
+    style.getPropertyValue('--yellow'),
+    style.getPropertyValue('--blue'),
+    'black',
+];
 const NUM_SHAPE_LAYERS = getRandom(5, 8);
 const MIN_OBJ = 4;
 const MAX_OBJ = 20;
@@ -105,7 +116,7 @@ class ShapeBackground {
 
     buildBackground(i) {
         // i = layer number
-        const c = this.getCurrColor(this.colors[i]);
+        const c = this.colors[i];
         fill(c);
         if (this.shapes[i] === 'square') {
             for (let j = 0; j < this.numObj[i]; j++) {
@@ -134,25 +145,6 @@ class ShapeBackground {
             }
         }
     }
-
-    getCurrColor(c) {
-        let nc;
-        if (c === 'orange') {
-            nc = color(...green);
-        } else if (c === 'pink') {
-            nc = color(...pink);
-        } else if (c === 'green') {
-            nc = color(...blue_);
-        } else if (c === 'yellow') {
-            nc = color(...blue);
-        } else if (c === 'black') {
-            nc = color(...yellow);
-        } else {
-            // purple
-            nc = color(...purple);
-        }
-        return nc;
-    }
 }
 
 function setup() {
@@ -162,7 +154,7 @@ function setup() {
     noStroke();
     pContent = new ShapeBackground(PFP_SIZE.w / 2.5, PFP_SIZE.h / 2.5);
     frameRate(FRAME_RATE);
-    background(color(...purple));
+    background('black');
 }
 
 function draw() {

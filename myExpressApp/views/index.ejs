@@ -17,7 +17,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=JetBrains+Mono:ital@0;1&display=swap"
             rel="stylesheet"
         />
         <link rel="stylesheet" type="text/css" href="/stylesheets/index.css" />
@@ -45,8 +45,11 @@
     </head>
     <body>
         <div id="mobile">
-            Cái này không hoạt động trên mobile được, hãy dùng 1 chiếc máy tính
-            nha...
+            - Cái này không hoạt động trên mobile được, hãy dùng 1 chiếc máy
+            tính nha! Bởi vì cần phải tải data từ Instagram về máy <br />
+            <br />
+            - This won't work on mobile, please use a computer! Because we need
+            to download data from Instagram
         </div>
         <div id="body-gradient">
             <div id="saved-photo-gradient">
@@ -58,7 +61,7 @@
                                 instagram wrapped<span class="hidden" id="vn">
                                     vi-en</span
                                 >
-                                <span id="user-name">Tiếng Viet</span>
+                                <span id="user-name">(Tiếng Việt)</span>
                             </h1>
                         </div>
                     </div>
@@ -77,7 +80,15 @@
                                 <h1 style="max-width: 13em">
                                     Bạn hay thả tim story của ai? 🤨
                                 </h1>
-                                <ol id="top-phrases"></ol>
+                                <ol id="top-story-likes"></ol>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="block">
+                                <h1 style="max-width: 13em">
+                                    Bạn hay thích post của ai?
+                                </h1>
+                                <ol id="top-post-likes"></ol>
                             </div>
                         </div>
                         <div id="bottom-row" class="row">
@@ -156,11 +167,7 @@
                         </div>
                     </section>
                     <ol id="instruction" class="section">
-                        <h1 id="inshead">
-                            Hướng dẫn <br />
-                            (nhớ kiểm tra xem bạn có đang ở đúng đường link:
-                            https://vanghoa.github.io/instagram-quan/ ko nhé)
-                        </h1>
+                        <h1 id="inshead">Hướng dẫn</h1>
                         <li>
                             <p>
                                 Tìm 'Your activity' ở phần 'More' trên Instagram
@@ -186,14 +193,19 @@
                             <img src="/img/instruction/ins4.png" />
                         </li>
                         <li>
-                            <p>Chọn 'Complete copy'</p>
+                            <p>Chọn 'All available information'</p>
                             <img src="/img/instruction/ins5.png" />
+                        </li>
+                        <li>
+                            <p>Chọn 'Download to device'</p>
+                            <img src="/img/instruction/device.png" />
                         </li>
                         <li>
                             <p>
                                 Chọn options theo hình: <br />
                                 - Date range: <em>Last year</em> (có thể chọn 1
                                 năm hay 3 tháng, tùy bạn) <br />
+                                - Notify: chọn email của bạn <br />
                                 - Format: <em>JSON</em> (nhớ chọn JSON!) <br />
                                 - Media quality: <em>Low</em> (chất lượng thấp
                                 để tải cho nhanh) <br /><br />

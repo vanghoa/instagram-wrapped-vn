@@ -427,7 +427,7 @@ def html(json_string):
                   'top-people-or-num-messages-sent'
               );
               const topPeople = document.getElementById('top-people');
-              const topPhrases = document.getElementById('top-phrases');
+              const topPhrases = document.getElementById('top-story-likes');
               const totalMessages = document.getElementById('total-messages');
               const totalReactsAndStickers = document.getElementById(
                   'total-reacts-and-stickers'
@@ -523,7 +523,7 @@ def html(json_string):
                           </div>
                           <div class="block">
                               <h1>Bạn thả tim story của ai nhiều nhất?</h1>
-                              <ol id="top-phrases"></ol>
+                              <ol id="top-story-likes"></ol>
                           </div>
                       </div>
                       <div id="bottom-row" class="row">

@@ -37,7 +37,7 @@ async function readDirectory() {
                 }
             }
             for (const [key, value] of entriesArray) {
-                if (value.kind == 'file' || key.includes('facebook')) continue;
+                if (value.kind == 'file' || excludeFolder(key)) continue;
                 dir = await recursiveFind(value, filename, endwith);
                 if (dir.result) return dir;
             }
@@ -153,6 +153,10 @@ async function readDirectory() {
         dirHandle,
         'story_likes.json'
     );
+    const liked_posts_check = await recursiveFindJSONCheck(
+        dirHandle,
+        'liked_posts.json'
+    );
     //
     let follow_directory = await recursiveFindLog(
         dirHandle,
@@ -188,6 +192,7 @@ async function readDirectory() {
     //////////////////////////////////////////////////////////////////
     try {
         // get name
+        console.log(personal_information);
         const isVn =
             personal_information.profile_user[0].string_map_data.hasOwnProperty(
                 'T\u00c3\u00aan ng\u00c6\u00b0\u00e1\u00bb\u009di d\u00c3\u00b9ng'
@@ -225,13 +230,14 @@ async function readDirectory() {
         const restricted_number =
             restricted_check?.relationships_restricted_users?.length ?? 0;
         //get liked posts
-        /*
-        const liked_posts = (await getJSON('likes/liked_posts.json'))
-            .likes_media_likes;
+        const liked_posts = liked_posts_check?.likes_media_likes ?? [];
         for (const { title } of liked_posts) {
             setDefault(liked_posts_data, title, 0);
             liked_posts_data[title]++;
         }
+        /*
+        const liked_posts = (await getJSON('likes/liked_posts.json'))
+            .likes_media_likes;
         delete liked_posts_data[your_user_name];
         liked_posts_data = Object.entries(liked_posts_data)
             .sort((a, b) => b[1] - a[1]) // Sort in descending order based on the values
@@ -328,6 +334,11 @@ async function readDirectory() {
             .sort((a, b) => b[1] - a[1]) // Sort in descending order based on the values
             .slice(0, LIMIT);
 
+        // sorting liked_posts_data
+        liked_posts_data = Object.entries(liked_posts_data)
+            .sort((a, b) => b[1] - a[1]) // Sort in descending order based on the values
+            .slice(0, LIMIT);
+
         const output_data = {
             user_name: your_user_name,
             total_messages: total_messages,
@@ -336,7 +347,7 @@ async function readDirectory() {
             top_story_likes: story_likes_data,
             total_story_likes: total_story_likes,
             total_story_likes_ppl: total_story_likes_ppl,
-            liked_posts_data: liked_posts_data,
+            top_post_likes: liked_posts_data,
             blocked_number: blocked_number,
             followers_list: followers_list,
             restricted_number: restricted_number,
@@ -394,11 +405,16 @@ function pauseStartAnimation() {
     }
 }
 
+function lightEl(i) {
+    return `<light>${i}.</light>`;
+}
+
 function dataPopulation(yourData) {
     document.querySelector('#instruction').classList.add('hidden');
     document.querySelector('#main').classList.remove('hidden');
     const topPeople = document.getElementById('top-people');
-    const topStoryLikes = document.getElementById('top-phrases');
+    const topStoryLikes = document.getElementById('top-story-likes');
+    const topPostLikes = document.getElementById('top-post-likes');
     const totalMessages = document.getElementById('total-messages');
     const totalStoryLikes = document.getElementById(
         'total-reacts-and-stickers'
@@ -411,14 +427,16 @@ function dataPopulation(yourData) {
     // populate top people
     for (let i = 0; i < yourData.top_inbox.length; i++) {
         let el = document.createElement('li');
-        let details = `${i + 1} ${yourData.top_inbox[i].name}`;
+        let details = `${lightEl(i + 1)} ${yourData.top_inbox[i].name}`;
         if (i <= 2) {
             const { hours, minutes } = secondsToHoursMinutes(
                 yourData.top_inbox[i].call_duration
             );
             details = `
                 <div class="details">
-                <div  class="summary">${i + 1} ${yourData.top_inbox[i].name}
+                <div  class="summary">${lightEl(i + 1)} ${
+                yourData.top_inbox[i].name
+            }
                 </div>
                 <greenspan onclick="togglehidden('info${i}');"><span>bấm để xem thêm</span></greenspan>
                 <p id="info${i}" class="hidden">
@@ -444,10 +462,19 @@ function dataPopulation(yourData) {
     // populate top story likes
     for (let i = 0; i < yourData.top_story_likes.length; i++) {
         let el = document.createElement('li');
-        el.innerHTML = `${i + 1} ${at}${
+        el.innerHTML = `${lightEl(i + 1)} ${at}${
             yourData.top_story_likes[i][0]
         } <greenspan>(${yourData.top_story_likes[i][1]} lần)</greenspan>`;
         topStoryLikes.appendChild(el);
+    }
+
+    // populate top post likes
+    for (let i = 0; i < yourData.top_post_likes.length; i++) {
+        let el = document.createElement('li');
+        el.innerHTML = `${lightEl(i + 1)} ${at}${
+            yourData.top_post_likes[i][0]
+        } <greenspan>(${yourData.top_post_likes[i][1]} posts)</greenspan>`;
+        topPostLikes.appendChild(el);
     }
 
     // populate followers list
@@ -594,4 +621,8 @@ function msgFile(name, error) {
 
 function msgFolder(name, error) {
     return `- :/ cái folder ${name} này không tồn tại - :/ Bạn có chắc bạn chọn đúng folder không? Đảm bảo rằng folder bạn chọn là folder chứa mấy cái folder con bên trong ví dự như 'personal_information', 'messages', 'followers_and_following',... Bạn có thể thử tải lại/giải nén lại file zip <br>- Chi tiết lỗi: ${error}<br><br>`;
+}
+
+function excludeFolder(key) {
+    return ['facebook', 'threads'].some((txt) => key.includes(txt));
 }
