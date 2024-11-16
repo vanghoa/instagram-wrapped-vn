@@ -558,11 +558,17 @@ function dataPopulation(yourData) {
     document.querySelector('#total_post_likes_ppl').innerText =
         yourData.total_post_likes_ppl.toLocaleString();
 
-    document.querySelector('#total_thread_likes').innerText =
-        yourData.total_thread_likes.toLocaleString();
+    if (yourData.top_thread_likes.length == 0) {
+        document.querySelector('#threadblockbottom h1').innerHTML =
+            'Hãy sử dụng Threads <br> để xem thêm 👀';
+        document.querySelector('#threadblockbottom blurb').remove();
+    } else {
+        document.querySelector('#total_thread_likes').innerText =
+            yourData.total_thread_likes.toLocaleString();
 
-    document.querySelector('#total_thread_likes_ppl').innerText =
-        yourData.total_thread_likes_ppl.toLocaleString();
+        document.querySelector('#total_thread_likes_ppl').innerText =
+            yourData.total_thread_likes_ppl.toLocaleString();
+    }
 
     document.querySelector('#blocked-number').innerText =
         yourData.blocked_number.toLocaleString();

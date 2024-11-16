@@ -233,6 +233,7 @@ li .name:hover::before {
 #threadblockbottom {
     transform: rotate(-5deg);
     width: fit-content;
+    min-height: calc(100% - 2.2rem);
 }
 #threadblockbottom :is(h1, blurb) {
     width: max-content;
