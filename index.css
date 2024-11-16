@@ -33,6 +33,9 @@ light {
     font-weight: 300;
     font-size: 0.8em;
 }
+che {
+    display: none;
+}
 
 body {
     min-height: 100vh;
@@ -107,8 +110,9 @@ blurb {
     display: inline-block;
 }
 
-li {
+ol li {
     counter-increment: custom;
+    cursor: pointer;
 }
 
 #main ol li:first-child {
@@ -119,6 +123,57 @@ li {
 }
 #main ol li:nth-child(3) {
     width: fit-content;
+}
+
+li .name {
+    position: relative;
+    pointer-events: auto;
+}
+
+li .name::before {
+    z-index: 100;
+    content: 'click để che tên';
+    pointer-events: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    padding: 0.5em 0.8em;
+    width: max-content;
+    opacity: 0;
+    transform: translateY(-100%);
+}
+
+#threadblock li .name::before {
+    background-color: black;
+    color: white;
+}
+
+li .name:hover::before {
+    opacity: 1;
+}
+
+.che .name::after {
+    content: ' ';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    pointer-events: none;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    background-color: black;
+}
+
+.che greenspan {
+    display: none;
+}
+
+.che .name {
+    color: transparent !important;
+}
+
+#top-thread-likes .che .name::after {
+    background-color: white;
 }
 
 #main li::marker {
@@ -132,15 +187,14 @@ li {
     margin: 0px 19px;
     gap: 10px;
 }
-
-#top-row {
-    margin-top: 14px;
-}
-
-#bottom-row p {
+.row.bottom p {
     font-size: 50px;
     margin: auto;
     margin-top: -0.6rem;
+}
+
+#top-row {
+    margin-top: 14px;
 }
 
 .block {
@@ -148,7 +202,7 @@ li {
     flex-shrink: 1;
     flex-grow: 1;
 }
-#threadblock {
+.thread {
     background-color: black;
     padding: 1.1rem;
     border-radius: 1rem;
@@ -156,16 +210,32 @@ li {
     top: -0.5rem;
     transform: rotate(3deg);
 }
-#threadblock * {
+.thread * {
     margin-top: 0;
     color: white;
 }
-#threadblock li {
+.thread li {
     font-weight: 600;
 }
-#threadblock greenspan,
-#threadblock light {
+.thread greenspan,
+.thread light {
     font-weight: 100;
+}
+.thread h1 {
+    font-weight: 500;
+}
+.thread p {
+    font-weight: 700;
+}
+.thread blurb {
+    font-weight: 300;
+}
+#threadblockbottom {
+    transform: rotate(-5deg);
+    width: fit-content;
+}
+#threadblockbottom :is(h1, blurb) {
+    width: max-content;
 }
 .unimportant {
     opacity: 0.6;
@@ -233,12 +303,17 @@ a:visited {
     display: inline;
 }
 
+.details {
+    pointer-events: none;
+}
+
 .details greenspan {
     cursor: pointer;
     display: block;
     width: fit-content;
     padding: 0 0.2em;
     border-radius: 1em;
+    pointer-events: auto;
 }
 
 .details greenspan span {
@@ -469,7 +544,6 @@ button {
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: -1;
-    filter: blur(3px);
 }
 
 #mobile {

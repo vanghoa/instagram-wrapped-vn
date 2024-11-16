@@ -3,17 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta
-            http-equiv="Content-Security-Policy"
-            content="
-    default-src 'self';
-    script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    font-src 'self' https://fonts.gstatic.com;
-    img-src 'self' data: https: blob:;
-"
-        />
-        <title>Instagram Wrapped</title>
+        <title>Instagram Wrapped Tiếng Việt</title>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
@@ -69,7 +59,7 @@
                         <div id="top-row" class="row">
                             <div class="block">
                                 <h1 id="top-people-or-num-messages-sent">
-                                    Top cái tên nằm trong dm 💬
+                                    Top cái tên luôn nằm trong dm 💬
                                 </h1>
                                 <ol id="top-people"></ol>
                             </div>
@@ -80,19 +70,24 @@
                         </div>
                         <div class="row">
                             <div class="block">
-                                <h1>Top @ bạn hay like post 🖼️</h1>
+                                <h1>Top @ bạn hay like their post 🖼️</h1>
                                 <ol id="top-post-likes"></ol>
                             </div>
-                            <div id="threadblock" class="block">
-                                <h1>Top @ bạn hay like thread 🧵</h1>
+                            <div id="threadblock" class="block thread">
+                                <h1>Top @ bạn hay like their thread 🧵</h1>
                                 <ol id="top-thread-likes"></ol>
                             </div>
                         </div>
-                        <div id="bottom-row" class="row">
+                        <div class="row bottom">
                             <div class="block">
                                 <h1>Bạn đã gửi</h1>
                                 <p id="total-messages"></p>
-                                <blurb>tin nhắn</blurb>
+                                <blurb style="display: inline-block"
+                                    >tin nhắn <br />
+                                    cho
+                                    <span id="total_messages_ppl"></span>
+                                    người</blurb
+                                >
                             </div>
                             <div class="block">
                                 <h1>Bạn đã để lại</h1>
@@ -103,6 +98,30 @@
                                     <span id="total_storylikes_ppl"></span>
                                     người</blurb
                                 >
+                            </div>
+                        </div>
+                        <div class="row bottom">
+                            <div class="block">
+                                <h1>Bạn đã like</h1>
+                                <p id="total_post_likes"></p>
+                                <blurb
+                                    >posts của <br />
+                                    <span id="total_post_likes_ppl"></span>
+                                    người
+                                </blurb>
+                            </div>
+                            <div class="block">
+                                <div id="threadblockbottom" class="thread">
+                                    <h1>Bạn đã like</h1>
+                                    <p id="total_thread_likes"></p>
+                                    <blurb style="display: inline-block"
+                                        >threads của <br />
+                                        <span
+                                            id="total_thread_likes_ppl"
+                                        ></span>
+                                        người</blurb
+                                    >
+                                </div>
                             </div>
                         </div>
                         <div class="row" id="blocked-row">

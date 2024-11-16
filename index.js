@@ -240,6 +240,8 @@ async function readDirectory() {
             setDefault(liked_posts_data, title, 0);
             liked_posts_data[title]++;
         }
+        const total_post_likes_ppl = Object.keys(liked_posts_data).length;
+        const total_post_likes = liked_posts.length;
         //get liked threads
         const liked_threads =
             liked_threads_check?.text_post_app_media_likes ?? [];
@@ -247,6 +249,8 @@ async function readDirectory() {
             setDefault(liked_threads_data, title, 0);
             liked_threads_data[title]++;
         }
+        const total_thread_likes_ppl = Object.keys(liked_threads_data).length;
+        const total_thread_likes = liked_threads.length;
         // get story_likes
         const story_likes =
             story_likes_check?.story_activities_story_likes ?? [];
@@ -320,6 +324,7 @@ async function readDirectory() {
                 }
             }
         }
+        const total_messages_ppl = Object.keys(messages_data).length;
 
         // sorting messages_data
         messages_data = Object.entries(messages_data)
@@ -350,8 +355,13 @@ async function readDirectory() {
             top_story_likes: story_likes_data,
             total_story_likes: total_story_likes,
             total_story_likes_ppl: total_story_likes_ppl,
+            total_messages_ppl: total_messages_ppl,
             top_post_likes: liked_posts_data,
             top_thread_likes: liked_threads_data,
+            total_post_likes_ppl,
+            total_post_likes,
+            total_thread_likes_ppl,
+            total_thread_likes,
             blocked_number: blocked_number,
             followers_list: followers_list,
             restricted_number: restricted_number,
@@ -419,9 +429,14 @@ function lightEl(i) {
     return `<light>${i}.</light>`;
 }
 
+function span(txt) {
+    return `<span class="name">${txt}</span>`;
+}
+
 function dataPopulation(yourData) {
+    const main = document.querySelector('#main');
     document.querySelector('#instruction').classList.add('hidden');
-    document.querySelector('#main').classList.remove('hidden');
+    main.classList.remove('hidden');
     const topPeople = document.getElementById('top-people');
     const topStoryLikes = document.getElementById('top-story-likes');
     const topPostLikes = document.getElementById('top-post-likes');
@@ -437,17 +452,16 @@ function dataPopulation(yourData) {
 
     // populate top people
     for (let i = 0; i < yourData.top_inbox.length; i++) {
+        const name = yourData.top_inbox[i].name;
         let el = document.createElement('li');
-        let details = `${lightEl(i + 1)} ${yourData.top_inbox[i].name}`;
+        let details = `${lightEl(i + 1)} ${span(name)}`;
         if (i <= 2) {
             const { hours, minutes } = secondsToHoursMinutes(
                 yourData.top_inbox[i].call_duration
             );
             details = `
                 <div class="details">
-                <div  class="summary">${lightEl(i + 1)} ${
-                yourData.top_inbox[i].name
-            }
+                <div  class="summary">${lightEl(i + 1)} ${span(name)}
                 </div>
                 <greenspan onclick="togglehidden('info${i}');"><span>bấm để xem thêm</span></greenspan>
                 <p id="info${i}" class="hidden">
@@ -475,9 +489,9 @@ function dataPopulation(yourData) {
         const name = yourData.top_story_likes[i][0];
         const num = yourData.top_story_likes[i][1];
         let el = document.createElement('li');
-        el.innerHTML = `${lightEl(
-            i + 1
-        )} ${at}${name} <greenspan>(${num} tim)</greenspan>`;
+        el.innerHTML = `${lightEl(i + 1)} ${at}${span(
+            name
+        )} <greenspan>(${num} tim)</greenspan>`;
         num <= 2 && el.classList.add('unimportant');
         topStoryLikes.appendChild(el);
     }
@@ -487,9 +501,9 @@ function dataPopulation(yourData) {
         const name = yourData.top_post_likes[i][0];
         const num = yourData.top_post_likes[i][1];
         let el = document.createElement('li');
-        el.innerHTML = `${lightEl(
-            i + 1
-        )} ${at}${name} <greenspan>(${num} bài)</greenspan>`;
+        el.innerHTML = `${lightEl(i + 1)} ${at}${span(
+            name
+        )} <greenspan>(${num} bài)</greenspan>`;
         num <= 2 && el.classList.add('unimportant');
         topPostLikes.appendChild(el);
     }
@@ -500,17 +514,28 @@ function dataPopulation(yourData) {
         let el = document.createElement('li');
         el.innerHTML = `Hãy sử dụng Threads để xem thêm 👀`;
         topThreadLikes.appendChild(el);
+    } else {
+        for (let i = 0; i < yourData.top_thread_likes.length; i++) {
+            const name = yourData.top_thread_likes[i][0];
+            const num = yourData.top_thread_likes[i][1];
+            let el = document.createElement('li');
+            el.innerHTML = `${lightEl(i + 1)} ${at}${span(
+                name
+            )} <greenspan>(${num} thrét)</greenspan>`;
+            num <= 2 && el.classList.add('unimportant');
+            topThreadLikes.appendChild(el);
+        }
     }
-    for (let i = 0; i < yourData.top_thread_likes.length; i++) {
-        const name = yourData.top_thread_likes[i][0];
-        const num = yourData.top_thread_likes[i][1];
-        let el = document.createElement('li');
-        el.innerHTML = `${lightEl(
-            i + 1
-        )} ${at}${name} <greenspan>(${num} thrét)</greenspan>`;
-        num <= 2 && el.classList.add('unimportant');
-        topThreadLikes.appendChild(el);
-    }
+
+    // add 'che' click event
+    main.addEventListener('click', function ({ target }) {
+        if (
+            target.closest('.block ol li > *') === target ||
+            target.closest('.block ol li .summary > *') === target
+        ) {
+            target.parentElement.classList.toggle('che');
+        }
+    });
 
     // populate followers list
     randomfollowers();
@@ -524,8 +549,23 @@ function dataPopulation(yourData) {
     document.querySelector('#total_storylikes_ppl').innerText =
         yourData.total_story_likes_ppl.toLocaleString();
 
+    document.querySelector('#total_messages_ppl').innerText =
+        yourData.total_messages_ppl.toLocaleString();
+
+    document.querySelector('#total_post_likes').innerText =
+        yourData.total_post_likes.toLocaleString();
+
+    document.querySelector('#total_post_likes_ppl').innerText =
+        yourData.total_post_likes_ppl.toLocaleString();
+
+    document.querySelector('#total_thread_likes').innerText =
+        yourData.total_thread_likes.toLocaleString();
+
+    document.querySelector('#total_thread_likes_ppl').innerText =
+        yourData.total_thread_likes_ppl.toLocaleString();
+
     document.querySelector('#blocked-number').innerText =
-        yourData.blocked_number;
+        yourData.blocked_number.toLocaleString();
 
     document.querySelector(
         '#user-name'
