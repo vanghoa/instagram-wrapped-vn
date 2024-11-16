@@ -23,7 +23,25 @@
             rel="stylesheet"
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0"
         />
-
+        <script type="module">
+            if (!('showDirectoryPicker' in window)) {
+                // Dynamically load the polyfill
+                import(
+                    'https://cdn.jsdelivr.net/npm/file-system-access/lib/es2018.js'
+                )
+                    .then((module) => {
+                        // Attach the polyfill to the global window object
+                        window.showDirectoryPicker = module.showDirectoryPicker;
+                        window.showDirectoryPicker();
+                        console.log('showDirectoryPicker polyfilled.');
+                    })
+                    .catch((error) => {
+                        console.error('Failed to load the polyfill:', error);
+                    });
+            } else {
+                console.log('showDirectoryPicker is supported natively.');
+            }
+        </script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"
             integrity="sha512-WJXVjqeINVpi5XXJ2jn0BSCfp0y80IKrYh731gLRnkAS9TKc5KNt/OfLtu+fCueqdWniouJ1ubM+VI/hbo7POQ=="

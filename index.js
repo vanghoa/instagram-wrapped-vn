@@ -103,7 +103,7 @@ async function readDirectory() {
 
     if (await recursiveFindLog(dirHandle, null, '.html')) {
         logmessage(
-            `- :/ Bạn ơi bạn check lại bước 6 - phải chọn format là JSON chứ không phải là HTML nhá<br><br>`
+            `- :/ Bạn ơi bạn check lại bước 7 - phải chọn format là JSON chứ không phải là HTML nhá<br><br>`
         );
         return;
     }
@@ -629,6 +629,10 @@ function randomfollowers() {
 }
 
 function screenshot(e) {
+    document
+        .querySelector('#saved-photo-gradient')
+        .classList.add('removeAllCheThumb');
+    e.innerHTML = 'chờ xíu';
     html2canvas(document.querySelector('#saved-photo-gradient'), {
         backgroundColor: style.getPropertyValue('--backgroundcolor'),
         onclone: (doc) => {
@@ -649,13 +653,16 @@ function screenshot(e) {
         // Create a download link
         const downloadLink = document.createElement('a');
         downloadLink.href = dataUrl;
-        downloadLink.download = 'screenshot.png'; // Specify the filename
+        downloadLink.download = 'InstagramWrappedTiengViet.png'; // Specify the filename
 
         // Trigger a click on the download link to start the download
         downloadLink.click();
+        document
+            .querySelector('#saved-photo-gradient')
+            .classList.remove('removeAllCheThumb');
+        e.innerHTML =
+            'ảnh đã được tự động lưu vào máy, nếu chưa, hãy kéo xuống dưới để lưu ảnh';
     });
-    e.innerHTML =
-        'ảnh đã được tự động lưu vào máy, nếu chưa, hãy kéo xuống dưới để lưu ảnh';
 }
 
 function togglehidden(id) {

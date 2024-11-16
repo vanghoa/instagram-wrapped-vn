@@ -130,6 +130,12 @@ li .name {
     pointer-events: auto;
 }
 
+.removeAllCheThumb li .name::before {
+    opacity: 0 !important;
+    display: none;
+    content: none;
+}
+
 li .name::before {
     z-index: 100;
     content: 'click để che tên';
@@ -414,6 +420,7 @@ a:visited {
 
 #instruction li {
     list-style-type: none;
+    cursor: auto;
 }
 
 #instruction li:before {
@@ -470,6 +477,7 @@ button {
     padding: 0.5em 1em;
     border: 5px var(--backgroundcolor) solid;
     color: var(--backgroundcolor);
+    background-color: white;
     cursor: pointer;
 }
 
