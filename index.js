@@ -383,7 +383,7 @@ async function readDirectory() {
 }
 
 function calcTimeScore(timestamp) {
-    return timestamp / 100000000000;
+    return timestamp / 10000;
 }
 
 function sortLikedData(data) {
