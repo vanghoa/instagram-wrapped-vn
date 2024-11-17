@@ -294,8 +294,11 @@ async function readDirectory() {
                                 call: 0,
                                 messages: 0,
                                 call_duration: 0,
+                                timecodeScore: 0,
                             });
                             messages_data[default_name].messages++;
+                            messages_data[default_name].timecodeScore +=
+                                calcTimeScore(m.timestamp_ms);
                         }
 
                         if (
@@ -307,6 +310,7 @@ async function readDirectory() {
                                 call: 0,
                                 messages: 0,
                                 call_duration: 0,
+                                timecodeScore: 0,
                             });
                             messages_data[default_name].call_duration +=
                                 m.call_duration;
@@ -330,8 +334,8 @@ async function readDirectory() {
         messages_data = Object.entries(messages_data)
             .map(([name, data]) => ({ name, ...data }))
             .sort((a, b) => {
-                const keyA = a.messages;
-                const keyB = b.messages;
+                const keyA = a.timecodeScore;
+                const keyB = b.timecodeScore;
 
                 // Sort in descending order
                 return keyB - keyA;
@@ -376,6 +380,10 @@ async function readDirectory() {
             `- Á đù! lỗi này ảo thật - xin bạn hãy report lại cho @bao.anh.bui trên instagram để sửa lỗi <br> - Chi tiết lỗi: ${error}<br><br>`
         );
     }
+}
+
+function calcTimeScore(timestamp) {
+    return timestamp / 100000000000;
 }
 
 function sortLikedData(data) {
