@@ -17,6 +17,8 @@ const atsymbol = getRandomItems('⚘✽✾✿❀❁❃❊❋✤✣⚜⚘ꕤꕥ�
 const at = `<span id="flower">${atsymbol}</span>`;
 const msg = `:/ Bạn có chắc bạn chọn đúng folder không? Đảm bảo rằng folder bạn chọn là folder chứa mấy cái folder con bên trong ví dự như 'personal_information', 'messages', 'followers_and_following',... Bạn có thể thử tải lại/giải nén lại file zip <br>-`;
 const LIMIT = 10;
+let startTimestamp = 0;
+let your_user_name = '';
 
 async function readDirectory() {
     async function recursiveFind(dir, filename, endwith = null) {
@@ -162,6 +164,10 @@ async function readDirectory() {
         dirHandle,
         'threads/liked_threads.json'
     );
+    const info_download = await recursiveFindJSONCheck(
+        dirHandle,
+        'your_information_download_requests.json'
+    );
     //
     let follow_directory = await recursiveFindLog(
         dirHandle,
@@ -196,13 +202,20 @@ async function readDirectory() {
     }
     //////////////////////////////////////////////////////////////////
     try {
+        // get info
+        if (info_download) {
+            const ts = info_download[
+                info_download.length - 1
+            ].label_values.find((vl) => vl.ent_field_name == 'StartTimestamp');
+            startTimestamp = (ts?.timestamp_value ?? 0) * 1000;
+        }
         // get name
         console.log(personal_information);
         const isVn =
             personal_information.profile_user[0].string_map_data.hasOwnProperty(
                 'T\u00c3\u00aan ng\u00c6\u00b0\u00e1\u00bb\u009di d\u00c3\u00b9ng'
             );
-        const your_user_name =
+        your_user_name =
             personal_information.profile_user[0].string_map_data[
                 isVn
                     ? 'T\u00c3\u00aan ng\u00c6\u00b0\u00e1\u00bb\u009di d\u00c3\u00b9ng'
@@ -294,11 +307,12 @@ async function readDirectory() {
                                 call: 0,
                                 messages: 0,
                                 call_duration: 0,
-                                timecodeScore: 0,
+                                score: 0,
                             });
                             messages_data[default_name].messages++;
-                            messages_data[default_name].timecodeScore +=
-                                calcTimeScore(m.timestamp_ms);
+                            messages_data[default_name].score += calcTimeScore(
+                                m.timestamp_ms
+                            );
                         }
 
                         if (
@@ -310,7 +324,7 @@ async function readDirectory() {
                                 call: 0,
                                 messages: 0,
                                 call_duration: 0,
-                                timecodeScore: 0,
+                                score: 0,
                             });
                             messages_data[default_name].call_duration +=
                                 m.call_duration;
@@ -334,24 +348,34 @@ async function readDirectory() {
         messages_data = Object.entries(messages_data)
             .map(([name, data]) => ({ name, ...data }))
             .sort((a, b) => {
-                const keyA = a.timecodeScore;
-                const keyB = b.timecodeScore;
+                const keyA = a.score;
+                const keyB = b.score;
 
                 // Sort in descending order
                 return keyB - keyA;
             })
             .slice(0, LIMIT);
+        const mean_messages =
+            messages_data.reduce((total, data) => total + data.score, 0) /
+            messages_data.length;
 
         // sorting story_likes_data
         story_likes_data = sortLikedData(story_likes_data);
+        const mean_story = calcMean(story_likes_data);
 
         // sorting liked_posts_data
         liked_posts_data = sortLikedData(liked_posts_data);
+        const mean_posts = calcMean(liked_posts_data);
 
-        // sorting liked_posts_data
+        // sorting liked_threads_data
         liked_threads_data = sortLikedData(liked_threads_data);
+        const mean_threads = calcMean(liked_threads_data);
 
         const output_data = {
+            mean_messages,
+            mean_story,
+            mean_posts,
+            mean_threads,
             user_name: your_user_name,
             total_messages: total_messages,
             total_reacts_and_stickers: total_reacts_and_stickers,
@@ -382,14 +406,25 @@ async function readDirectory() {
     }
 }
 
+function calcMean(arr) {
+    if (arr.length == 0) {
+        return 0;
+    }
+    return arr.reduce((total, data) => total + data[1], 0) / arr.length;
+}
+
 function calcTimeScore(timestamp) {
-    return timestamp / 10000;
+    const out = startTimestamp
+        ? (timestamp - startTimestamp) / 46300160000 + 1
+        : 1;
+    return out;
 }
 
 function sortLikedData(data) {
     return Object.entries(data)
         .sort((a, b) => b[1] - a[1]) // Sort in descending order based on the values
-        .slice(0, LIMIT);
+        .slice(0, LIMIT)
+        .filter((a) => a[0] !== your_user_name);
 }
 
 async function readFileContents(file) {
@@ -461,7 +496,9 @@ function dataPopulation(yourData) {
     // populate top people
     for (let i = 0; i < yourData.top_inbox.length; i++) {
         const name = yourData.top_inbox[i].name;
+        const num = yourData.top_inbox[i].score;
         let el = document.createElement('li');
+        num <= yourData.mean_messages && el.classList.add('unimportant');
         let details = `${lightEl(i + 1)} ${span(name)}`;
         if (i <= 2) {
             const { hours, minutes } = secondsToHoursMinutes(
@@ -471,8 +508,8 @@ function dataPopulation(yourData) {
                 <div class="details">
                 <div  class="summary">${lightEl(i + 1)} ${span(name)}
                 </div>
-                <greenspan onclick="togglehidden('info${i}');"><span>bấm để xem thêm</span></greenspan>
-                <p id="info${i}" class="hidden">
+                <greenspan class="rmvscreenshot" onclick="togglehidden('info${i}');"><span>bấm để xem thêm</span></greenspan>
+                <p id="info${i}" class="hidden rmvscreenshot">
                     ${
                         yourData.top_inbox[i].call == 0 ||
                         (hours == 0 && minutes == 0)
@@ -500,7 +537,7 @@ function dataPopulation(yourData) {
         el.innerHTML = `${lightEl(i + 1)} ${at}${span(
             name
         )} <greenspan>(${num} tim)</greenspan>`;
-        num <= 2 && el.classList.add('unimportant');
+        num <= yourData.mean_story && el.classList.add('unimportant');
         topStoryLikes.appendChild(el);
     }
 
@@ -512,7 +549,7 @@ function dataPopulation(yourData) {
         el.innerHTML = `${lightEl(i + 1)} ${at}${span(
             name
         )} <greenspan>(${num} bài)</greenspan>`;
-        num <= 2 && el.classList.add('unimportant');
+        num <= yourData.mean_posts && el.classList.add('unimportant');
         topPostLikes.appendChild(el);
     }
 
@@ -530,7 +567,7 @@ function dataPopulation(yourData) {
             el.innerHTML = `${lightEl(i + 1)} ${at}${span(
                 name
             )} <greenspan>(${num} thrét)</greenspan>`;
-            num <= 2 && el.classList.add('unimportant');
+            num <= yourData.mean_threads && el.classList.add('unimportant');
             topThreadLikes.appendChild(el);
         }
     }
@@ -645,7 +682,7 @@ function screenshot(e) {
         backgroundColor: style.getPropertyValue('--backgroundcolor'),
         onclone: (doc) => {
             let dom = [
-                ...doc.querySelectorAll('.details greenspan'),
+                ...doc.querySelectorAll('.rmvscreenshot'),
                 ...doc.querySelectorAll('button'),
             ];
             dom.forEach((elem) => {
