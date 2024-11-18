@@ -415,7 +415,7 @@ function calcMean(arr) {
 
 function calcTimeScore(timestamp) {
     const out = startTimestamp
-        ? (timestamp - startTimestamp) / 46300160000 + 1
+        ? (timestamp - startTimestamp) / 26300160000 + 1
         : 1;
     return out;
 }
