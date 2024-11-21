@@ -204,9 +204,14 @@ async function readDirectory() {
     try {
         // get info
         if (info_download) {
-            const ts = info_download[
-                info_download.length - 1
-            ].label_values.find((vl) => vl.ent_field_name == 'StartTimestamp');
+            const ts = info_download
+                .reduce(
+                    (max, item) => (+item.fbid > +max.fbid ? item : max),
+                    info_download[0]
+                )
+                .label_values.find(
+                    (vl) => vl.ent_field_name == 'StartTimestamp'
+                );
             startTimestamp = (ts?.timestamp_value ?? 0) * 1000;
         }
         // get name
