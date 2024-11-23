@@ -729,9 +729,9 @@ onload = (e) => {
     getRandomBorderRadius('#follower-row');
     getRandomBorderRadius('#follower-note');
     getRandomBorderRadius('#blocked-note');
-    getRandomBorderRadius('#footer', 50);
+    getRandomBorderRadius('#footer', 30);
     getRandomBorderRadius('#thank-you', 50);
-    getRandomBorderRadius('#inshead', 50);
+    getRandomBorderRadius('#mobile', 30);
     document.querySelectorAll('#instruction li img').forEach((elem) => {
         randomBorderRadius(elem, 70);
     });
