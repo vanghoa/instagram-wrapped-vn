@@ -23,7 +23,7 @@ const PFP_SIZE = {
     w: profile_data.clientWidth * 2,
     h: profile_data.clientHeight * 3,
 };
-const FRAME_RATE = 4;
+const FRAME_RATE = 2;
 const HOLD_LENGTH = FRAME_RATE;
 let pContent;
 let currLayerNumber = 0;
@@ -117,7 +117,19 @@ class ShapeBackground {
     buildBackground(i) {
         // i = layer number
         const c = this.colors[i];
+        stroke('white');
+        strokeWeight(5);
         fill(c);
+        for (let j = 0; j < this.numObj[i]; j++) {
+            push();
+            translate(PFP_SIZE.w / 2, PFP_SIZE.h / 2);
+            rotate((TWO_PI * j) / this.numObj[i]);
+            //scale(random(0.01, 3));
+            makeShape(random(2, 20));
+            pop();
+        }
+
+        return;
         if (this.shapes[i] === 'square') {
             for (let j = 0; j < this.numObj[i]; j++) {
                 push();
@@ -193,4 +205,49 @@ function draw() {
 
 function getRandom(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function makeShape(sides, maxSize = random(200, 300)) {
+    //at least 2 sides
+    sides = sides >= 2 ? floor(sides) : 2;
+    // split a circle in #of sides slices
+    const slice = TWO_PI / sides;
+
+    //an array to hold the vertex angles
+    let angles = Array(sides);
+
+    //add some randomness
+    for (let i = 0; i < angles.length; i++) {
+        angles[i] = random(slice * i, slice * (i + 1));
+    }
+
+    //some randomness in dist center to vertex? it's a choice
+    // do you want stars?
+    // set a number and you wil got all in same perimeter
+    let mags = Array(sides);
+    for (let i = 0; i < mags.length; i++) {
+        // setting this hard number here defeats the idea of the mags array
+        // just changed to keep shapes more behaved
+        // swap for more crazy shapes
+        mags[i] = random(15, maxSize); //50
+    }
+
+    // use trig to get points from angles and magnitudes
+    let vtx = Array(sides);
+    for (let i = 0; i < vtx.length; i++) {
+        vtx[i] = createVector(
+            cos(angles[i]) * mags[i],
+            sin(angles[i]) * mags[i]
+        );
+    }
+
+    //where to draw?
+    //translate(random(width), random(height));
+
+    //make the shape
+    beginShape();
+    for (let i = 0; i < vtx.length; i++) {
+        curveVertex(vtx[i].x, vtx[i].y);
+    }
+    endShape(CLOSE);
 }
