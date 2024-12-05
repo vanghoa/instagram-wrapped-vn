@@ -563,7 +563,7 @@ button {
 }
 
 #mobile {
-    background-color: var(--backgroundcolor);
+    background-color: var(--turquoise);
     font-weight: 800;
     font-size: 20rem;
     width: 80%;
@@ -582,6 +582,7 @@ button {
     max-width: 100%;
     border-radius: 20rem;
     display: block;
+    border: 5px dashed white;
 }
 
 #capture {
