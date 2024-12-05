@@ -171,11 +171,8 @@ async function readDirectory() {
     //
     let follow_directory = await recursiveFindLog(
         dirHandle,
-        'followers_and_following',
-        null,
-        msg
+        'followers_and_following'
     );
-    if (!follow_directory) return;
     //
     let messenger_directory = await recursiveFindLog(
         dirHandle,
@@ -214,6 +211,12 @@ async function readDirectory() {
                 );
             startTimestamp = (ts?.timestamp_value ?? 0) * 1000;
         }
+        if (startTimestamp == 0) {
+            startTimestamp = Date.now() - 365 * 24 * 60 * 60 * 1000;
+            console.log(
+                'no trace of previous timestamp, use default 1 year ago!'
+            );
+        }
         // get name
         console.log(personal_information);
         const isVn =
@@ -227,19 +230,21 @@ async function readDirectory() {
                     : 'Username'
             ].value;
         // get followers
-        for await (const [key, value] of follow_directory) {
-            if (key.startsWith('followers') && key.endsWith('.json')) {
-                const data = JSON.parse(
-                    await readFileContents(await value.getFile())
-                );
-                data.forEach(({ string_list_data }) => {
-                    string_list_data.forEach(({ value }) => {
-                        followers_object[value] = true;
+        if (follow_directory) {
+            for await (const [key, value] of follow_directory) {
+                if (key.startsWith('followers') && key.endsWith('.json')) {
+                    const data = JSON.parse(
+                        await readFileContents(await value.getFile())
+                    );
+                    data.forEach(({ string_list_data }) => {
+                        string_list_data.forEach(({ value }) => {
+                            followers_object[value] = true;
+                        });
                     });
-                });
+                }
             }
+            followers_list = Object.keys(followers_object);
         }
-        followers_list = Object.keys(followers_object);
 
         //get blocked
         const blocked_number =
@@ -450,7 +455,7 @@ function calcTimeScore(timestamp) {
     const out = startTimestamp
         ? (timestamp - startTimestamp) / 26300160000 + 1
         : 1;
-    return out;
+    return out < 0.2 ? 0.2 : out;
 }
 
 function sortLikedData(data) {
@@ -698,6 +703,9 @@ function getRandomItems(array, count) {
 }
 
 function randomfollowers() {
+    if (followers_list.length == 0) {
+        return;
+    }
     const random_followers = getRandomItems(followers_list, 5);
     const random_followers_elem = document.querySelector('#followers-list');
     const thank_you_msg = document.querySelector('#thank-you');
