@@ -203,7 +203,7 @@ async function readDirectory() {
     //////////////////////////////////////////////////////////////////
     try {
         // get info
-        if (info_download.reduce) {
+        if (info_download?.reduce) {
             const ts = info_download
                 .reduce(
                     (max, item) => (+item.fbid > +max.fbid ? item : max),
