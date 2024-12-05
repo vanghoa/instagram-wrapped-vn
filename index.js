@@ -376,7 +376,35 @@ async function readDirectory() {
         liked_threads_data = sortLikedData(liked_threads_data);
         const mean_threads = calcMean(liked_threads_data);
 
+        // calc standard deviation for msg
+        const stdDevMessages = calculateStandardDeviation(
+            messages_data.map(({ score }) => score),
+            mean_messages
+        );
+
+        const stdDevStory = calculateStandardDeviation(
+            story_likes_data.map((data) => data[1]),
+            mean_story
+        );
+
+        const stdDevPost = calculateStandardDeviation(
+            liked_posts_data.map((data) => data[1]),
+            mean_posts
+        );
+
+        const stdDevThreads =
+            liked_threads_data.length > 0
+                ? calculateStandardDeviation(
+                      liked_threads_data.map((data) => data[1]),
+                      mean_threads
+                  )
+                : null;
+
         const output_data = {
+            stdDevThreads,
+            stdDevPost,
+            stdDevStory,
+            stdDevMessages,
             mean_messages,
             mean_story,
             mean_posts,
@@ -503,7 +531,11 @@ function dataPopulation(yourData) {
         const name = yourData.top_inbox[i].name;
         const num = yourData.top_inbox[i].score;
         let el = document.createElement('li');
-        num <= yourData.mean_messages && el.classList.add('unimportant');
+        if (num >= yourData.mean_messages + yourData.stdDevMessages) {
+            el.classList.add('high');
+        } else {
+            el.classList.add('unimportant');
+        }
         let details = `${lightEl(i + 1)} ${span(name)}`;
         if (i <= 2) {
             const { hours, minutes } = secondsToHoursMinutes(
@@ -542,7 +574,8 @@ function dataPopulation(yourData) {
         el.innerHTML = `${lightEl(i + 1)} ${at}${span(
             name
         )} <greenspan>(${num} tim)</greenspan>`;
-        num <= yourData.mean_story && el.classList.add('unimportant');
+        num <= yourData.mean_story + yourData.stdDevStory &&
+            el.classList.add('unimportant');
         topStoryLikes.appendChild(el);
     }
 
@@ -554,7 +587,8 @@ function dataPopulation(yourData) {
         el.innerHTML = `${lightEl(i + 1)} ${at}${span(
             name
         )} <greenspan>(${num} bài)</greenspan>`;
-        num <= yourData.mean_posts && el.classList.add('unimportant');
+        num <= yourData.mean_posts + yourData.stdDevPost &&
+            el.classList.add('unimportant');
         topPostLikes.appendChild(el);
     }
 
@@ -563,6 +597,7 @@ function dataPopulation(yourData) {
         topThreadLikes.previousElementSibling.remove();
         let el = document.createElement('li');
         el.innerHTML = `Hãy sử dụng Threads để xem thêm 👀`;
+        el.style.fontSize = '1em';
         topThreadLikes.appendChild(el);
     } else {
         for (let i = 0; i < yourData.top_thread_likes.length; i++) {
@@ -572,7 +607,8 @@ function dataPopulation(yourData) {
             el.innerHTML = `${lightEl(i + 1)} ${at}${span(
                 name
             )} <greenspan>(${num} thrét)</greenspan>`;
-            num <= yourData.mean_threads && el.classList.add('unimportant');
+            num <= yourData.mean_threads + yourData.stdDevThreads &&
+                el.classList.add('unimportant');
             topThreadLikes.appendChild(el);
         }
     }
@@ -763,4 +799,19 @@ function msgFolder(name, error) {
 
 function excludeFolder(key) {
     return ['facebook', 'threads'].some((txt) => key.includes(txt));
+}
+
+function calculateStandardDeviation(counts, mean = null) {
+    // Step 1: Calculate the mean
+    if (mean == null) {
+        mean = counts.reduce((sum, count) => sum + count, 0) / counts.length;
+    }
+
+    // Step 2: Calculate the variance
+    const variance =
+        counts.reduce((sum, count) => sum + Math.pow(count - mean, 2), 0) /
+        counts.length;
+
+    // Step 3: Return the square root of the variance (standard deviation)
+    return Math.sqrt(variance);
 }

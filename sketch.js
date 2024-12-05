@@ -7,17 +7,15 @@ const style = getComputedStyle(document.body);
 const SHAPES = ['circle', 'square', 'triangle'];
 const COLORS = [
     style.getPropertyValue('--orange'),
-    style.getPropertyValue('--lightpurple'),
     style.getPropertyValue('--backgroundcolor'),
     style.getPropertyValue('--turquoise'),
     style.getPropertyValue('--pink'),
     style.getPropertyValue('--yellow'),
-    style.getPropertyValue('--blue'),
     'black',
 ];
 const NUM_SHAPE_LAYERS = getRandom(5, 8);
-const MIN_OBJ = 4;
-const MAX_OBJ = 20;
+const MIN_OBJ = 1;
+const MAX_OBJ = 1;
 const profile_data = document.querySelector('#profile-photo');
 const PFP_SIZE = {
     w: profile_data.clientWidth * 2,
@@ -117,17 +115,15 @@ class ShapeBackground {
     buildBackground(i) {
         // i = layer number
         const c = this.colors[i];
+        push();
         stroke('white');
         strokeWeight(5);
         fill(c);
-        for (let j = 0; j < this.numObj[i]; j++) {
-            push();
-            translate(PFP_SIZE.w / 2, PFP_SIZE.h / 2);
-            rotate((TWO_PI * j) / this.numObj[i]);
-            //scale(random(0.01, 3));
-            makeShape(random(2, 20));
-            pop();
-        }
+        translate(PFP_SIZE.w / 2, PFP_SIZE.h / 2);
+        //rotate((TWO_PI * j) / this.numObj[i]);
+        //scale(random(0.01, 3));
+        makeShape(random(2, 20));
+        pop();
 
         return;
         if (this.shapes[i] === 'square') {
@@ -172,9 +168,11 @@ function setup() {
 function draw() {
     if (!paused) {
         //background(color(...purple));
+        pContent.buildBackground(floor(random(0, currLayerNumber)));
+        /*
         for (let i = 0; i < currLayerNumber; i++) {
             pContent.buildBackground(i);
-        }
+        }*/
 
         if (countingUp) {
             if (!holding) {

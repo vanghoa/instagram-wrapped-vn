@@ -21,7 +21,7 @@ body {
     --pink: rgb(74, 193, 0);
     --blue: rgb(0, 27, 199);
     --yellow: rgb(133, 89, 0);
-    --lightpurple: rgb(188, 235, 255);
+    --lightpurple: rgb(208, 241, 255);
     --backgroundcolor: rgb(0, 128, 255);
     --fontsz: 15rem;
 }
@@ -121,19 +121,18 @@ ol li {
     cursor: pointer;
 }
 
-#main ol li:first-child {
+#main ol li {
     width: fit-content;
 }
-#main ol li:nth-child(2) {
-    width: fit-content;
-}
+#main ol li:first-child,
+#main ol li:nth-child(2),
 #main ol li:nth-child(3) {
-    width: fit-content;
 }
 
 li .name {
     position: relative;
     pointer-events: auto;
+    font-size: 1em;
 }
 
 .removeAllCheThumb li .name::before {
@@ -210,6 +209,17 @@ li .name::before {
     flex-shrink: 1;
     flex-grow: 1;
 }
+:not(.thread, .nohover).block:hover {
+    background-color: white;
+    padding: 18rem;
+    border-radius: 18rem;
+    position: relative;
+    top: -3rem;
+    transform: rotate(var(--r));
+}
+.block:hover h1 {
+    margin-top: 0;
+}
 .thread {
     background-color: black;
     padding: 18rem;
@@ -248,6 +258,7 @@ li .name::before {
 }
 .unimportant {
     opacity: 0.5;
+    font-size: 1em !important;
 }
 
 .block p {
@@ -310,10 +321,12 @@ a:visited {
 
 .summary {
     display: inline;
+    font-size: inherit;
 }
 
 .details {
     pointer-events: none;
+    font-size: inherit;
 }
 
 .details greenspan {
@@ -544,6 +557,7 @@ button {
     overflow: hidden;
     border-radius: 20rem;
     border: 5rem solid white;
+    background-color: black;
 }
 
 #profile-photo canvas {
