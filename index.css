@@ -122,7 +122,9 @@ ol li {
 #main ol li {
     width: fit-content;
 }
-#main ol li:first-child,
+#main ol li:first-child {
+    opacity: 1 !important;
+}
 #main ol li:nth-child(2),
 #main ol li:nth-child(3) {
 }
