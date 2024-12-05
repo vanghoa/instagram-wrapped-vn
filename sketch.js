@@ -2,13 +2,14 @@ if (top != self) {
     document.body.innerHTML = '';
 }
 
+let colorkey = 0;
+
 const style = getComputedStyle(document.body);
 
 const SHAPES = ['circle', 'square', 'triangle'];
 const COLORS = [
     style.getPropertyValue('--orange'),
     style.getPropertyValue('--backgroundcolor'),
-    style.getPropertyValue('--turquoise'),
     style.getPropertyValue('--pink'),
     style.getPropertyValue('--yellow'),
     'black',
@@ -114,10 +115,13 @@ class ShapeBackground {
 
     buildBackground(i) {
         // i = layer number
-        const c = this.colors[i];
+        if (!COLORS[colorkey]) {
+            colorkey = 0;
+        }
+        const c = COLORS[colorkey++];
         push();
-        stroke('white');
-        strokeWeight(5);
+        //stroke('white');
+        //strokeWeight(5);
         fill(c);
         translate(PFP_SIZE.w / 2, PFP_SIZE.h / 2);
         //rotate((TWO_PI * j) / this.numObj[i]);
@@ -168,7 +172,7 @@ function setup() {
 function draw() {
     if (!paused) {
         //background(color(...purple));
-        pContent.buildBackground(floor(random(0, currLayerNumber)));
+        pContent.buildBackground();
         /*
         for (let i = 0; i < currLayerNumber; i++) {
             pContent.buildBackground(i);

@@ -67,7 +67,6 @@ body {
     margin: 80rem 0;
     max-width: 90vw;
     width: min-content;
-    border: 5rem white solid;
 }
 
 #container {
@@ -81,7 +80,6 @@ body {
     align-items: center;
     gap: 20rem;
     padding: 20rem;
-    border: 5rem solid white;
 }
 
 h1 {
@@ -282,7 +280,7 @@ li .name::before {
     border-bottom-right-radius: 7rem;
     max-width: 30em;
     padding: 1.5em 1.5em;
-    border: 5rem solid white;
+
     max-width: 320rem;
 }
 
@@ -295,17 +293,16 @@ a:visited {
 #pause-button {
     top: 20rem;
     left: 20rem;
-    font-size: var(--fontsz);
+    font-size: 1.2em;
     padding: 0.7em 0.8em;
     z-index: 3;
     position: fixed;
     color: rgb(255, 255, 255);
-    background: var(--orange);
+    background: var(--turquoise);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     border-radius: 20rem;
-    border: 5rem white solid;
     max-width: 20em;
 }
 
@@ -315,7 +312,7 @@ a:visited {
 }
 
 #pause-button-icon {
-    font-size: inherit;
+    font-size: 1.2em;
     margin-right: 8rem;
 }
 
@@ -413,7 +410,6 @@ a:visited {
     background-image: url('bonghoate.png');
     background-repeat: repeat;
     background-size: contain;
-    border: 5rem solid white;
 }
 
 #thank-you {
@@ -453,7 +449,7 @@ a:visited {
 #instruction li img {
     width: 550rem;
     border-radius: 40rem;
-    border: 5rem var(--backgroundcolor) solid;
+
     margin: 0 auto;
     display: block;
 }
@@ -483,7 +479,7 @@ button {
     border: 0rem;
     font-weight: bold;
     padding: 0.5em 1em;
-    border: 5rem var(--backgroundcolor) solid;
+
     color: var(--backgroundcolor);
     background-color: white;
     cursor: pointer;
@@ -493,7 +489,8 @@ button {
     font-size: 1.2em;
     width: fit-content;
     margin: 60rem auto;
-    box-shadow: 0 0 40rem 10rem var(--backgroundcolor);
+    background-color: var(--turquoise);
+    color: white;
 }
 
 #error {
@@ -543,7 +540,6 @@ button {
     max-width: 8em;
     max-height: 8em;
     border-radius: 20rem;
-    border: 5rem solid white;
 }
 
 #profile-photo {
@@ -556,8 +552,6 @@ button {
     z-index: 2;
     overflow: hidden;
     border-radius: 20rem;
-    border: 5rem solid white;
-    background-color: black;
 }
 
 #profile-photo canvas {
@@ -582,14 +576,12 @@ button {
     color: white;
     display: none;
     align-self: center;
-    border: white 5rem dashed;
 }
 
 #capture canvas {
     max-width: 100%;
     border-radius: 20rem;
     display: block;
-    border: white 5rem dashed;
 }
 
 #capture {
@@ -610,6 +602,8 @@ button {
 
 [onclick='randomfollowers()'] {
     margin-top: 1em;
+    background-color: var(--turquoise);
+    color: white;
 }
 
 #flower {
@@ -633,7 +627,6 @@ button {
     padding: 0.5em;
     background-color: var(--backgroundcolor);
     color: white;
-    border: 5rem solid white;
 }
 
 @media screen and (max-width: 600px) {
